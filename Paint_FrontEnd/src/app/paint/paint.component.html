@@ -1,0 +1,158 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="tools">
+    <div class="grid-holder">
+        <mat-grid-list cols="5">
+            <mat-grid-tile title="Selector">
+                <i class="fa fa-mouse-pointer"></i>
+            </mat-grid-tile>
+            <mat-grid-tile title="Brush">
+                <i class="fa fa-paint-brush"></i>
+            </mat-grid-tile>
+            <mat-grid-tile title="Erase shape">
+                <i class="fa fa-eraser"></i>
+            </mat-grid-tile>
+            <mat-grid-tile title="Clear screen">
+                <i class="fa fa-trash"></i>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <div class="mini-grid-holder">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile title="Line">
+                            &#9135;
+                        </mat-grid-tile>
+                        <mat-grid-tile title="Triangle">
+                            &#9651;
+                        </mat-grid-tile>
+                        <mat-grid-tile title="Square">
+                            &#9723;
+                        </mat-grid-tile>
+                        <mat-grid-tile title="Rectangle">
+                            &#9645;
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div class="grid-holder2">
+        <mat-grid-list cols="1">
+            <mat-grid-tile title="Circle">
+                <i class="fa fa-circle-thin"></i>
+            </mat-grid-tile>
+            <mat-grid-tile id="special-tile" title="Ellipse">
+                &#11053;
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div class="grid-holder3">
+        <mat-grid-list cols="2">
+            <mat-grid-tile title="Undo">
+                <i class="fa fa-undo"></i>
+            </mat-grid-tile>
+            <mat-grid-tile title="Redo">
+                <i class="fa fa-repeat"></i>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div class="grid-holder4">
+        <mat-grid-list cols="2">
+            <mat-grid-tile title="Save">
+                <i class="fa fa-save"></i>
+            </mat-grid-tile>
+            <mat-grid-tile title="Load">
+                <i class="fa fa-upload"></i>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div class="grid-holder5">
+        <mat-grid-list cols="2">
+            <mat-grid-tile title="Copy">
+                <i class="fa fa-copy"></i>
+            </mat-grid-tile>
+            <mat-grid-tile title="Paste">
+                <i class="fa fa-paste"></i>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div class="grid-holder6">
+        <mat-grid-list cols="4">
+            <mat-grid-tile id="color-tile">
+                <div class="mini-grid-holder2">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="black" title="Black"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="gray" title="Gray"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="white" title="White"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="brown" title="Brown"></button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile id="color-tile">
+                <div class="mini-grid-holder2">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="pink" title="Pink"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="red" title="Red"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="rose" title="Rose"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="gold" title="Gold"></button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile><mat-grid-tile id="color-tile">
+                <div class="mini-grid-holder2">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="orange" title="Orange"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="yellow" title="Yellow"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="lime" title="Lime"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="lblue" title="Light Blue"></button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile><mat-grid-tile id="color-tile">
+                <div class="mini-grid-holder2">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="green" title="Green"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="turquoise" title="Turquoise"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="blue" title="Blue"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="purple" title="Purple"></button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    <div class="more-colors">
+        <textarea class="rgb-value" placeholder="RGB"></textarea>
+    </div>
+</div>
+<div class="konva-align">
+    <div id="konva-holder" (mousedown)="findCursorInitial($event)" (mouseup)="findCursorFinal($event)" (click)="rect()">
+    </div>
+</div>

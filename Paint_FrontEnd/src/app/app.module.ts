@@ -1,16 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PaintComponent } from './paint/paint.component';
+
+import { MatButtonToggleModule } from '@angular/material/button-toggle'
+import { MatGridListModule } from '@angular/material/grid-list'
+import { MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PaintComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    MatButtonToggleModule,
+    MatIconModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

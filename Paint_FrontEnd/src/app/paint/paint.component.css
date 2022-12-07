@@ -1,0 +1,218 @@
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+
+.tools{
+    position: absolute;
+    display: flex;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100px;
+    background: #1d1d1d;
+}
+
+.konva-align{
+    position: absolute;
+    top: 100px;
+    left: 0%;
+}
+
+.grid-holder{
+    position: relative;
+    top: 25%;
+    left: 5%;
+    width: 250px;
+}
+
+.grid-holder2{
+    position: relative;
+    top: 25%;
+    left: 5.1%;
+    width: 24px;
+}
+
+.grid-holder3{
+    position: relative;
+    top: 25%;
+    left: 7.5%;
+    width: 100px;
+}
+
+.grid-holder4{
+    position: relative;
+    top: 25%;
+    left: 10%;
+    width: 100px;
+}
+
+.grid-holder5{
+    position: relative;
+    top: 25%;
+    left: 12.5%;
+    width: 100px;
+}
+
+.grid-holder6{
+    position: relative;
+    top: 25%;
+    left: 15%;
+    width: 200px;
+}
+
+.mini-grid-holder{
+    position: relative;
+    top: -2%;
+    left: -2%;
+    width: 50px;
+}
+
+.mini-grid-holder2{
+    position: relative;
+    top: 1px;
+    width: 50px;
+}
+
+.more-colors{
+    position: relative;
+    left: 17.5%;
+}
+
+.rgb-value{
+    position: relative;
+    top: 40%;
+    width: 50px;
+    height: 20px;
+    resize: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+mat-grid-tile {
+    border: 1px solid;
+    border-color: rgba(246, 246, 246, 0.529);
+    font-size: 20px;
+    color: rgba(246, 246, 246, 0.529);
+}
+
+#special-tile{
+    font-size: 25px;
+}
+
+mat-grid-tile:hover{
+    color: rgba(127, 124, 124, 0.575);
+    cursor: pointer;
+}
+
+mat-grid-tile:active{
+    color: rgba(92, 88, 88, 0.575);
+    cursor: pointer;
+}
+
+.colors{
+    border: none;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+#color-tile{
+    border: none;
+}
+
+#red{
+    background-color: red;
+}
+
+#black{
+    background-color: black;
+}
+
+#white{
+    background-color: white;
+}
+
+#green{
+    background-color: green;
+}
+
+#blue{
+    background-color: blue;
+}
+
+#yellow{
+    background-color: yellow;
+}
+
+#gray{
+    background-color: gray;
+}
+
+#pink{
+    background-color: rgb(248, 15, 198);
+}
+
+#brown{
+    background-color: brown;
+}
+
+#rose{
+    background-color: rgb(246, 95, 121);
+}
+
+#orange{
+    background-color: orange;
+}
+
+#lime{
+    background-color: lime;
+}
+
+#turquoise{
+    background-color: turquoise;
+}
+
+#purple{
+    background-color: purple;
+}
+
+#gold{
+    background-color: gold;
+}
+
+#lblue{
+    background-color: lightskyblue;
+}
+
+@-webkit-keyframes swing
+{
+    50%{
+        -webkit-transform: translateY(-3px);
+        transform: translateY(-3px);
+    }
+    100%{
+        -webkit-transform: translateY(0px);
+        transform: translateY(0x);
+    }
+}
+@keyframes swing
+{
+    50%{
+        -webkit-transform: translateY(-3px);
+        transform: translateY(-3px);
+    }
+    100%{
+        -webkit-transform: translateY(0px);
+        transform: translateY(0x);
+    }
+}
+
+.colors:hover{
+    border: silver solid;
+    cursor: pointer;
+}
+
+.colors:focus{
+    -webkit-animation: swing 500ms ease;
+    animation: swing 500ms ease;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
