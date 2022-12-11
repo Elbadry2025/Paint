@@ -83,34 +83,16 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="black" title="Black"></button>
+                            <button  class="colors" id="black" title="Black" (click)="coloring('black')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="gray" title="Gray"></button>
+                            <button class="colors" id="gray" title="Gray"(click)="coloring('gray')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="white" title="White"></button>
+                            <button class="colors" id="white" title="White"(click)="coloring('white')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="brown" title="Brown"></button>
-                        </mat-grid-tile>
-                    </mat-grid-list>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile id="color-tile">
-                <div class="mini-grid-holder2">
-                    <mat-grid-list cols="2">
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="pink" title="Pink"></button>
-                        </mat-grid-tile>
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="red" title="Red"></button>
-                        </mat-grid-tile>
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="rose" title="Rose"></button>
-                        </mat-grid-tile>
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="gold" title="Gold"></button>
+                            <button class="colors" id="brown" title="Brown"(click)="coloring('brown')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>
@@ -119,16 +101,16 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="orange" title="Orange"></button>
+                            <button class="colors" id="pink" title="Pink"(click)="coloring('pink')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="yellow" title="Yellow"></button>
+                            <button class="colors" id="red" title="Red"(click)="coloring('red')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="lime" title="Lime"></button>
+                            <button class="colors" id="rose" title="Rose"(click)="coloring('rose')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="lblue" title="Light Blue"></button>
+                            <button class="colors" id="gold" title="Gold"(click)="coloring('gold')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>
@@ -137,16 +119,34 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="green" title="Green"></button>
+                            <button class="colors" id="orange" title="Orange"(click)="coloring('organe')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="turquoise" title="Turquoise"></button>
+                            <button class="colors" id="yellow" title="Yellow"(click)="coloring('yellow')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="blue" title="Blue"></button>
+                            <button class="colors" id="lime" title="Lime" (click)="coloring('lime')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="purple" title="Purple"></button>
+                            <button class="colors" id="lblue" title="Light Blue"(click)="coloring('light blue')"></button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile id="color-tile">
+                <div class="mini-grid-holder2">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="green" title="Green"(click)="coloring('green')"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="turquoise" title="Turquoise"(click)="coloring('turquoise')"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="blue" title="Blue"(click)="coloring('blue')"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="purple" title="Purple"(click)="coloring('purple')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>

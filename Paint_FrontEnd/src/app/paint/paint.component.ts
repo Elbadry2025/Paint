@@ -20,6 +20,7 @@ export class PaintComponent implements OnInit {
   shape!: Konva.Shape;
   IsRectangle! : boolean;
   IsTriangle! : boolean;
+  newColor: string = "black";
 
   isNowDrawing: Boolean = false;
   cursor: string = "default";
@@ -87,6 +88,9 @@ export class PaintComponent implements OnInit {
     }
   }
 
+  coloring(color: string){
+    this.newColor = color;
+  }
   mouseDownHandler(){
     if(this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon || 
       this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse || 
@@ -108,6 +112,7 @@ export class PaintComponent implements OnInit {
     }else{
       return;
     }
+    this.shape.stroke(this.newColor);
     this.addShape(this.shape);
   }
 
@@ -179,7 +184,7 @@ export class PaintComponent implements OnInit {
     }else if(this.shape instanceof Konva.Line && this.IsTriangle){
       const newX: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
       const newY: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
-      this.shape.points([0,0,newX,0,newX/2,newY,0,0]); 
+      this.shape.points([0,0,newX,0,newX/2,newY,0,0]);
       this.addFlag = true;
     }
     else{
@@ -190,11 +195,14 @@ export class PaintComponent implements OnInit {
 
   mouseUpHandler(){
     if(this.isNowDrawing = true && this.addFlag){
+      
       this.isNowDrawing = false;
       this.shapeList.push(this.shape);
       this.addFlag = false;
+      
     }
     this.shape = new Konva.Shape;
+    
     for(let shape of this.shapeList){
       shape.draggable(true);
     }
