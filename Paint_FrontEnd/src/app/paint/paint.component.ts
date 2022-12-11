@@ -98,6 +98,8 @@ export class PaintComponent implements OnInit {
       this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
     }else if(this.shape instanceof Konva.Rect && this.IsRectangle){
       this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
+    }else if(this.shape instanceof Konva.Line){
+      this.shape = this.factory.constructKonvaShape("line", this.stage);
     }else{
       return;
     }
@@ -164,7 +166,12 @@ export class PaintComponent implements OnInit {
       this.shape.radiusX(newRadiusX);
       this.shape.radiusY(newRadiusY);
       this.addFlag = true;
-    }else{
+    }else if(this.shape instanceof Konva.Line){
+      const newX: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
+      const newY: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
+      this.shape.points([0,0,newX,newY]);
+    }
+    else{
       return;
     }
     this.layer.batchDraw();

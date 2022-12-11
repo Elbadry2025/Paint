@@ -40,6 +40,14 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
+        }else if(type == "line"){
+            this.shape = new Konva.Line({
+                x: stage.getPointerPosition()?.x,
+                y: stage.getPointerPosition()?.y,
+                points:[0,0],
+                stroke: "black",
+                draggable: true
+            })
         }
         return this.shape;
     }
