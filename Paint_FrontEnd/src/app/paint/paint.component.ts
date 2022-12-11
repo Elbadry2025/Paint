@@ -11,8 +11,12 @@ export class PaintComponent implements OnInit {
 
   stage!: Konva.Stage;
   layer!: Konva.Layer;
-  rectangle!: Konva.Circle;
-
+  circule!: Konva.Circle;
+  square!: Konva.Rect;
+  triangle!: Konva.Line;
+  ellipse!: Konva.Ellipse;
+  rectangle!: Konva.Rect;
+  line!: Konva.Line;
   cursorX!: number;
   cursorY!: number;
 
@@ -64,9 +68,9 @@ export class PaintComponent implements OnInit {
     this.stage.add(this.layer);
   }
 
-  rect(){
+  cir(){
     if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
-    this.rectangle = new Konva.Circle({
+    this.circule = new Konva.Circle({
       x: this.stage.getPointerPosition()?.x,
       y: this.stage.getPointerPosition()?.y,
       width: 60,
@@ -74,9 +78,62 @@ export class PaintComponent implements OnInit {
       stroke: "black",
       draggable: true
     });
+    this.addShape(this.circule);
+  }
+  squ(){
+    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
+    this.square = new Konva.Rect({
+      x: this.stage.getPointerPosition()?.x,
+      y: this.stage.getPointerPosition()?.y,
+      width: 60,
+      height: 60,
+      stroke: "black",
+      draggable: true
+    });
+    this.addShape(this.square);
+  }
+  tri(){
+    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
+    this.triangle = new Konva.Line({
+      x: this.stage.getPointerPosition()?.x,
+      y: this.stage.getPointerPosition()?.y,
+      width: 60,
+      height: 60,
+      stroke: "black",
+      lineCap: "round",
+      lineJoin: "round",
+      points:[0,0,150,0,75,-90,0,0],
+      draggable: true
+    });
+    this.addShape(this.triangle);
+  }
+  li(){
+    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
+    this.line = new Konva.Line({
+      x: this.stage.getPointerPosition()?.x,
+      y: this.stage.getPointerPosition()?.y,
+      width: 60,
+      height: 60,
+      stroke: "black",
+      lineCap: "round",
+      lineJoin: "round",
+      points:[0,0,150,0],
+      draggable: true
+    });
+    this.addShape(this.line);
+  }
+  rect(){
+    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
+    this.rectangle = new Konva.Rect({
+      x: this.stage.getPointerPosition()?.x,
+      y: this.stage.getPointerPosition()?.y,
+      width: 100,
+      height: 40,
+      stroke: "black",
+      draggable: true
+    });
     this.addShape(this.rectangle);
   }
-
   clearScreen(){
     this.layer.destroy();
   }
