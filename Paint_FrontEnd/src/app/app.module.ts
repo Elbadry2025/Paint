@@ -6,8 +6,7 @@ import { PaintComponent } from './paint/paint.component';
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatGridListModule } from '@angular/material/grid-list'
-import { MatIconModule } from '@angular/material/icon';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     BrowserModule,
     MatButtonToggleModule,
     MatIconModule,
-    MatGridListModule,
-    BrowserAnimationsModule
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

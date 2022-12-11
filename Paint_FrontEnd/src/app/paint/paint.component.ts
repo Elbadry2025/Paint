@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import Konva from 'konva';
+import { Rect } from 'konva/lib/shapes/Rect';
+import { stages } from 'konva/lib/Stage';
+import { Square } from '../Shapes/square';
+import { IFactory } from '../Factory/ifactory';
+import { Factory } from '../Factory/factory';
 
 
 @Component({
@@ -11,27 +16,22 @@ export class PaintComponent implements OnInit {
 
   stage!: Konva.Stage;
   layer!: Konva.Layer;
-  circule!: Konva.Circle;
-  square!: Konva.Rect;
-  triangle!: Konva.Line;
-  ellipse!: Konva.Ellipse;
-  rectangle!: Konva.Rect;
-  line!: Konva.Line;
-  cursorX!: number;
-  cursorY!: number;
+  factory: IFactory = new Factory;
+  shape!: Konva.Shape;
 
-  cursorXin!: number;
-  cursorYin!: number;
+  isNowDrawing: Boolean = false;
+  cursor: string = "default";
 
-  cursorXfin!: number;
-  cursorYfin!: number;
+  shapeList: Konva.Shape[] = [];
+  addFlag: Boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
+    document.documentElement.style.setProperty('--wbCursor', "crosshair");
     this.stage = new Konva.Stage({
-      height: 645,
-      width: window.innerWidth,
+      height: 637,
+      width: 1536,
       container: "konva-holder"
     });
   
@@ -40,102 +40,143 @@ export class PaintComponent implements OnInit {
     this.stage.add(this.layer);
   }
 
-  contextmenu = "none";
-  contextmenuX = 0;
-  contextmenuY = 0;
-  onRightClick(event: MouseEvent) {
-    event.preventDefault();
-    this.contextmenuX = event.clientX;
-    this.contextmenuY = event.clientY;
-    this.contextmenu = "block";
+  selector(){
+    
   }
 
-  findCursorInitial(event: MouseEvent){
-    this.cursorX = event.clientX;
-    this.cursorY = event.clientY;
-    this.cursorXin = event.clientX;
-    this.cursorYin = event.clientY;
-    console.log(this.cursorX, this.cursorY);
+  line(){
+    this.shape = new Konva.Line;
+    for(let shape of this.shapeList){
+      shape.draggable(false);
+    }
+  }
+  circle(){
+    this.shape = new Konva.Circle;
+    for(let shape of this.shapeList){
+      shape.draggable(false);
+    }
+  }
+  ellipse(){
+    this.shape = new Konva.Ellipse;
+    for(let shape of this.shapeList){
+      shape.draggable(false);
+    }
+  }
+  triangle(){
+    this.shape = new Konva.Shape;
+    for(let shape of this.shapeList){
+      shape.draggable(false);
+    }
+  }
+  square(){
+    this.shape = new Konva.Shape;
+    for(let shape of this.shapeList){
+      shape.draggable(false);
+    }
+  }
+  rect(){
+    this.shape = new Konva.Rect;
+    for(let shape of this.shapeList){
+      shape.draggable(false);
+    }
   }
 
-  findCursorFinal(event: MouseEvent){
-    this.cursorXfin = event.clientX;
-    this.cursorYfin = event.clientY;
+  mouseDownHandler(){
+    if(this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon || 
+      this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse || 
+      this.shape instanceof Konva.Line){
+        this.isNowDrawing = true;
+    }
+    if(this.shape instanceof Konva.Rect){
+      this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
+    }else if(this.shape instanceof Konva.Circle){
+      this.shape = new Konva.Circle({
+        x: this.stage.getPointerPosition()?.x,
+        y: this.stage.getPointerPosition()?.y,
+        radius: 0,
+        stroke: "black",
+        draggable: true
+      })
+    }else{
+      return;
+    }
+    this.addShape(this.shape);
+  }
+
+  mouseMoveHandler(){
+    if(!this.isNowDrawing){
+      for(let shape of this.shapeList){
+        if((shape instanceof Konva.Rect) && (this.stage.getPointerPosition()?.x as number) > shape.x() && 
+        (this.stage.getPointerPosition()?.x as number) < shape.x() + shape.width() &&
+        (this.stage.getPointerPosition()?.y as number) > shape.y() &&
+        (this.stage.getPointerPosition()?.y as number) < shape.y() + shape.height()){
+          document.documentElement.style.setProperty('--wbCursor', "grab");
+          break;
+        }else{
+          document.documentElement.style.setProperty('--wbCursor', "crosshair");
+        }
+      }
+      return;
+    }
+    if(this.shape instanceof Konva.Rect){
+      const newWidth: number = Math.abs((this.stage.getPointerPosition()?.x as number) - this.shape.x());
+      const newheight: number = Math.abs((this.stage.getPointerPosition()?.y as number) - this.shape.y());
+      if((this.stage.getPointerPosition()?.x as number) > this.shape.x()){
+        if((this.stage.getPointerPosition()?.y as number) > this.shape.y())
+          if(newWidth < newheight)
+            this.shape.width(newWidth).height(newWidth);
+          else
+           this.shape.width(newheight).height(newheight);
+        else
+          if(newWidth < newheight)
+            this.shape.width(newWidth).height(-newWidth);
+          else
+            this.shape.width(newheight).height(-newheight);
+      }else{
+        if((this.stage.getPointerPosition()?.y as number) > this.shape.y())
+          if(newWidth < newheight)
+            this.shape.width(-newWidth).height(newWidth);
+          else
+            this.shape.width(-newheight).height(newheight);
+        else
+          if(newWidth < newheight)
+            this.shape.width(-newWidth).height(-newWidth);
+          else
+            this.shape.width(-newheight).height(-newheight);
+      }
+      this.addFlag = true;
+    }else if(this.shape instanceof Konva.Circle){
+      const rise: number = Math.pow((this.stage.getPointerPosition()?.x as number) - this.shape.x(), 2);
+      const run: number = Math.pow((this.stage.getPointerPosition()?.y as number) - this.shape.y(), 2);
+      const newRadius: number = Math.sqrt(rise + run);
+      this.shape.radius(newRadius);
+      this.addFlag = true;
+    }else{
+      return;
+    }
+    this.layer.batchDraw();
+  }
+
+  mouseUpHandler(){
+    if(this.isNowDrawing = true && this.addFlag){
+      this.isNowDrawing = false;
+      this.shapeList.push(this.shape);
+      this.addFlag = false;
+    }
+    this.shape = new Konva.Shape;
+    for(let shape of this.shapeList){
+      shape.draggable(true);
+    }
   }
 
   addShape(konvaShape: Konva.Shape) {
-    this.layer.add(konvaShape);
+    this.layer.add(konvaShape).batchDraw;
     this.stage.add(this.layer);
   }
 
-  cir(){
-    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
-    this.circule = new Konva.Circle({
-      x: this.stage.getPointerPosition()?.x,
-      y: this.stage.getPointerPosition()?.y,
-      width: 60,
-      height: 30,
-      stroke: "black",
-      draggable: true
-    });
-    this.addShape(this.circule);
-  }
-  squ(){
-    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
-    this.square = new Konva.Rect({
-      x: this.stage.getPointerPosition()?.x,
-      y: this.stage.getPointerPosition()?.y,
-      width: 60,
-      height: 60,
-      stroke: "black",
-      draggable: true
-    });
-    this.addShape(this.square);
-  }
-  tri(){
-    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
-    this.triangle = new Konva.Line({
-      x: this.stage.getPointerPosition()?.x,
-      y: this.stage.getPointerPosition()?.y,
-      width: 60,
-      height: 60,
-      stroke: "black",
-      lineCap: "round",
-      lineJoin: "round",
-      points:[0,0,150,0,75,-90,0,0],
-      draggable: true
-    });
-    this.addShape(this.triangle);
-  }
-  li(){
-    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
-    this.line = new Konva.Line({
-      x: this.stage.getPointerPosition()?.x,
-      y: this.stage.getPointerPosition()?.y,
-      width: 60,
-      height: 60,
-      stroke: "black",
-      lineCap: "round",
-      lineJoin: "round",
-      points:[0,0,150,0],
-      draggable: true
-    });
-    this.addShape(this.line);
-  }
-  rect(){
-    if(this.cursorXin != this.cursorXfin || this.cursorYin != this.cursorYfin) return;
-    this.rectangle = new Konva.Rect({
-      x: this.stage.getPointerPosition()?.x,
-      y: this.stage.getPointerPosition()?.y,
-      width: 100,
-      height: 40,
-      stroke: "black",
-      draggable: true
-    });
-    this.addShape(this.rectangle);
-  }
   clearScreen(){
     this.layer.destroy();
+    while(this.shapeList.length != 0) this.shapeList.pop();
   }
 
 }

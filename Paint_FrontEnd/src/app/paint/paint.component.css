@@ -3,24 +3,27 @@
 .tools{
     position: absolute;
     display: flex;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100px;
+    top: 5px;
+    left: 200px;
+    width: 1115px;
+    height: 103px;
+    border-radius: 50px;
+    border: 1px solid yellow;
     background: #1d1d1d;
 }
 
 .konva-align{
     position: absolute;
-    top: 100px;
+    top: 108px;
     left: 0%;
+    cursor: var(--wbCursor);
 }
 
 .grid-holder{
     position: relative;
     top: 25%;
     left: 5%;
-    width: 250px;
+    width: 300px;
 }
 
 .grid-holder2{
@@ -74,11 +77,11 @@
 .more-colors{
     position: relative;
     left: 17.5%;
+    top: 35%;
 }
 
 .rgb-value{
     position: relative;
-    top: 40%;
     width: 50px;
     height: 20px;
     resize: none;
@@ -182,7 +185,7 @@ mat-grid-tile:active{
     background-color: lightskyblue;
 }
 
-@-webkit-keyframes swing
+@-webkit-keyframes jump
 {
     50%{
         -webkit-transform: translateY(-3px);
@@ -193,7 +196,7 @@ mat-grid-tile:active{
         transform: translateY(0x);
     }
 }
-@keyframes swing
+@keyframes jump
 {
     50%{
         -webkit-transform: translateY(-3px);
@@ -211,8 +214,9 @@ mat-grid-tile:active{
 }
 
 .colors:focus{
-    -webkit-animation: swing 500ms ease;
-    animation: swing 500ms ease;
+    -webkit-animation: jump 500ms ease;
+    animation: jump 500ms ease;
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
+    border: 3px solid silver;
 }
