@@ -1,9 +1,11 @@
 import Konva from "konva";
 import { IShape } from "../Shapes/ishape";
+import { Square } from "../Shapes/square";
 import { IFactory } from "./ifactory";
 
 export class Factory implements IFactory {
     shape!: Konva.Shape;
+    backendShape!: IShape;
     constructKonvaShape(type: string, stage: Konva.Stage): Konva.Shape {
         if (type == "ellipse") {
             this.shape = new Konva.Ellipse({
@@ -67,8 +69,11 @@ export class Factory implements IFactory {
         }
         return this.shape;
     }
-    constructBackEndShape(): IShape {
-        throw new Error("Method not implemented.");
+    constructBackEndShape(type: string): IShape {
+        if(type == "square"){
+            this.backendShape = new Square(0, 0, "black", "white", 0, true, -1, 0);
+        }
+        return this.backendShape;
     }
-
+    
 }

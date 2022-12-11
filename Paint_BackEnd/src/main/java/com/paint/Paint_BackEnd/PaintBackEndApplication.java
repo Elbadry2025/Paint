@@ -1,13 +1,13 @@
-package com.paint.Paint_BackEnd;
+package com.paint.paint_backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PaintBackEndApplication {
+public class PaintBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PaintBackEndApplication.class, args);
+		SpringApplication.run(PaintBackendApplication.class, args);
 	}
 
 }

@@ -1,10 +1,10 @@
-package com.paint.Paint_BackEnd;
+package com.paint.paint_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PaintBackEndApplicationTests {
+class PaintBackendApplicationTests {
 
 	@Test
 	void contextLoads() {

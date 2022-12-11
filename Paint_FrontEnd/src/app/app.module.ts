@@ -7,6 +7,9 @@ import { PaintComponent } from './paint/paint.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatGridListModule } from '@angular/material/grid-list'
 import { MatIconModule } from '@angular/material/icon'
+import { SendService } from './Service/send.service';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -17,9 +20,10 @@ import { MatIconModule } from '@angular/material/icon'
     BrowserModule,
     MatButtonToggleModule,
     MatIconModule,
-    MatGridListModule
+    MatGridListModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [SendService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

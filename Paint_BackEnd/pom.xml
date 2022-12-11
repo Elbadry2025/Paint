@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.paint</groupId>
-	<artifactId>Paint_BackEnd</artifactId>
+	<artifactId>paint_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Paint_BackEnd</name>
-	<description>Web based paint application</description>
+	<name>paint_backend</name>
+	<description>paint web application</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

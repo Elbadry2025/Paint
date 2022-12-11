@@ -1,5 +1,5 @@
 import { IShape } from "./ishape";
-//oijge
+
 export class Ellipse extends IShape{
     private _hRadius: number;
 
