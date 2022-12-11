@@ -14,7 +14,7 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "rectangle"){
+        }else if(type == "square"){
             this.shape = new Konva.Rect({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,

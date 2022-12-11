@@ -18,6 +18,7 @@ export class PaintComponent implements OnInit {
   layer!: Konva.Layer;
   factory: IFactory = new Factory;
   shape!: Konva.Shape;
+  IsRectangle! : boolean;
 
   isNowDrawing: Boolean = false;
   cursor: string = "default";
@@ -69,12 +70,14 @@ export class PaintComponent implements OnInit {
     }
   }
   square(){
-    this.shape = new Konva.Shape;
+    this.IsRectangle = false;
+    this.shape = new Konva.Rect;
     for(let shape of this.shapeList){
       shape.draggable(false);
     }
   }
   rect(){
+    this.IsRectangle = true;
     this.shape = new Konva.Rect;
     for(let shape of this.shapeList){
       shape.draggable(false);
@@ -87,8 +90,8 @@ export class PaintComponent implements OnInit {
       this.shape instanceof Konva.Line){
         this.isNowDrawing = true;
     }
-    if(this.shape instanceof Konva.Rect){
-      this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
+    if(this.shape instanceof Konva.Rect && !this.IsRectangle){
+      this.shape = this.factory.constructKonvaShape("square", this.stage);
     }else if(this.shape instanceof Konva.Circle){
       this.shape = this.factory.constructKonvaShape("circle", this.stage);
     }else if(this.shape instanceof Konva.Ellipse){
