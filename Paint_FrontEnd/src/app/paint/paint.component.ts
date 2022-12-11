@@ -96,6 +96,8 @@ export class PaintComponent implements OnInit {
       this.shape = this.factory.constructKonvaShape("circle", this.stage);
     }else if(this.shape instanceof Konva.Ellipse){
       this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
+    }else if(this.shape instanceof Konva.Rect && this.IsRectangle){
+      this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
     }else{
       return;
     }
@@ -117,7 +119,7 @@ export class PaintComponent implements OnInit {
       }
       return;
     }
-    if(this.shape instanceof Konva.Rect){
+    if(this.shape instanceof Konva.Rect && !this.IsRectangle){
       const newWidth: number = Math.abs((this.stage.getPointerPosition()?.x as number) - this.shape.x());
       const newheight: number = Math.abs((this.stage.getPointerPosition()?.y as number) - this.shape.y());
       if((this.stage.getPointerPosition()?.x as number) > this.shape.x()){
@@ -144,7 +146,13 @@ export class PaintComponent implements OnInit {
             this.shape.width(-newheight).height(-newheight);
       }
       this.addFlag = true;
-    }else if(this.shape instanceof Konva.Circle){
+    }else if(this.shape instanceof Konva.Rect && this.IsRectangle){
+      const newWidth: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
+      const newheight: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
+      this.shape.width(newWidth).height(newheight);
+      this.addFlag = true;
+    }
+    else if(this.shape instanceof Konva.Circle){
       const rise: number = Math.pow((this.stage.getPointerPosition()?.x as number) - this.shape.x(), 2);
       const run: number = Math.pow((this.stage.getPointerPosition()?.y as number) - this.shape.y(), 2);
       const newRadius: number = Math.sqrt(rise + run);
