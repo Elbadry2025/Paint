@@ -90,13 +90,7 @@ export class PaintComponent implements OnInit {
     if(this.shape instanceof Konva.Rect){
       this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
     }else if(this.shape instanceof Konva.Circle){
-      this.shape = new Konva.Circle({
-        x: this.stage.getPointerPosition()?.x,
-        y: this.stage.getPointerPosition()?.y,
-        radius: 0,
-        stroke: "black",
-        draggable: true
-      })
+      this.shape = this.factory.constructKonvaShape("circle", this.stage);
     }else if(this.shape instanceof Konva.Ellipse){
       this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
     }else{

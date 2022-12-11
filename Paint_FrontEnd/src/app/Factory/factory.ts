@@ -14,12 +14,20 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "square"){
+        }else if(type == "rectangle"){
             this.shape = new Konva.Rect({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
                 width: 0,
                 height: 0,
+                stroke: "black",
+                draggable: true
+            })
+        }else if(type == "circle"){
+            this.shape = new Konva.Circle({
+                x: stage.getPointerPosition()?.x,
+                y: stage.getPointerPosition()?.y,
+                radius: 0,
                 stroke: "black",
                 draggable: true
             })

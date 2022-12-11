@@ -2,18 +2,18 @@ import { IShape } from "./ishape";
 
 export class circle extends IShape {
     
-    private _sideLength: number;
+    private _radius: number;
 
-    constructor(x: number, y: number, stroke: string, fill: string, rotate: number, draggable: boolean, id: number, sideLength: number){
+    constructor(x: number, y: number, stroke: string, fill: string, rotate: number, draggable: boolean, id: number, radius: number){
         super(x, y, stroke, fill, rotate, draggable, id);
-        this._sideLength = sideLength;
+        this._radius = radius;
         this.type = "circle";
     }
 
     public get sideLength(): number {
-        return this._sideLength;
+        return this._radius;
     }
     public set sideLength(value: number) {
-        this._sideLength = value;
+        this._radius= value;
     }
 }
