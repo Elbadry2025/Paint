@@ -18,9 +18,11 @@ export class PaintComponent implements OnInit {
   layer!: Konva.Layer;
   factory: IFactory = new Factory;
   shape!: Konva.Shape;
+  prev_shape!: Konva.Shape;
   IsRectangle!: boolean;
   IsTriangle!: boolean;
   IsBrush!: boolean;
+
   newColor: string = "black";
 
   isNowDrawing: Boolean = false;
@@ -52,18 +54,21 @@ export class PaintComponent implements OnInit {
     this.IsTriangle = false;
     this.IsBrush = false;
     this.shape = new Konva.Line;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
   circle() {
     this.shape = new Konva.Circle;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
   ellipse() {
     this.shape = new Konva.Ellipse;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -72,6 +77,7 @@ export class PaintComponent implements OnInit {
     this.IsTriangle = true;
     this.IsBrush = false;
     this.shape = new Konva.Line;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -79,6 +85,7 @@ export class PaintComponent implements OnInit {
   square() {
     this.IsRectangle = false;
     this.shape = new Konva.Rect;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -86,6 +93,7 @@ export class PaintComponent implements OnInit {
   rect() {
     this.IsRectangle = true;
     this.shape = new Konva.Rect;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -95,6 +103,7 @@ export class PaintComponent implements OnInit {
     this.IsBrush = true;
     this.IsTriangle = false;
     this.shape = new Konva.Line;
+    this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -104,6 +113,10 @@ export class PaintComponent implements OnInit {
     this.newColor = color;
   }
   mouseDownHandler() {
+    for (let shape of this.shapeList) {
+      shape.draggable(false);
+    }
+    this.shape = this.prev_shape;
     if (this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon ||
       this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse ||
       this.shape instanceof Konva.Line) {
@@ -214,14 +227,11 @@ export class PaintComponent implements OnInit {
 
   mouseUpHandler() {
     if (this.isNowDrawing = true && this.addFlag) {
-
       this.isNowDrawing = false;
       this.shapeList.push(this.shape);
       this.addFlag = false;
-
     }
     this.shape = new Konva.Shape;
-
     for (let shape of this.shapeList) {
       shape.draggable(true);
     }
