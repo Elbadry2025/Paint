@@ -19,6 +19,7 @@ export class PaintComponent implements OnInit {
   factory: IFactory = new Factory;
   shape!: Konva.Shape;
   IsRectangle! : boolean;
+  IsTriangle! : boolean;
 
   isNowDrawing: Boolean = false;
   cursor: string = "default";
@@ -46,6 +47,7 @@ export class PaintComponent implements OnInit {
   }
 
   line(){
+    this.IsTriangle = false;
     this.shape = new Konva.Line;
     for(let shape of this.shapeList){
       shape.draggable(false);
@@ -64,7 +66,8 @@ export class PaintComponent implements OnInit {
     }
   }
   triangle(){
-    this.shape = new Konva.Shape;
+    this.IsTriangle = true;
+    this.shape = new Konva.Line;
     for(let shape of this.shapeList){
       shape.draggable(false);
     }
@@ -98,8 +101,10 @@ export class PaintComponent implements OnInit {
       this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
     }else if(this.shape instanceof Konva.Rect && this.IsRectangle){
       this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
-    }else if(this.shape instanceof Konva.Line){
+    }else if(this.shape instanceof Konva.Line && !this.IsTriangle){
       this.shape = this.factory.constructKonvaShape("line", this.stage);
+    }else if(this.shape instanceof Konva.Line && this.IsTriangle){
+      this.shape = this.factory.constructKonvaShape("triangle", this.stage);
     }else{
       return;
     }
@@ -166,10 +171,16 @@ export class PaintComponent implements OnInit {
       this.shape.radiusX(newRadiusX);
       this.shape.radiusY(newRadiusY);
       this.addFlag = true;
-    }else if(this.shape instanceof Konva.Line){
+    }else if(this.shape instanceof Konva.Line && !this.IsTriangle){
       const newX: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
       const newY: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
       this.shape.points([0,0,newX,newY]);
+      this.addFlag = true;
+    }else if(this.shape instanceof Konva.Line && this.IsTriangle){
+      const newX: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
+      const newY: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
+      this.shape.points([0,0,newX,0,newX/2,newY,0,0]); 
+      this.addFlag = true;
     }
     else{
       return;
