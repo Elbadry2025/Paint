@@ -97,6 +97,8 @@ export class PaintComponent implements OnInit {
         stroke: "black",
         draggable: true
       })
+    }else if(this.shape instanceof Konva.Ellipse){
+      this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
     }else{
       return;
     }
@@ -150,6 +152,12 @@ export class PaintComponent implements OnInit {
       const run: number = Math.pow((this.stage.getPointerPosition()?.y as number) - this.shape.y(), 2);
       const newRadius: number = Math.sqrt(rise + run);
       this.shape.radius(newRadius);
+      this.addFlag = true;
+    }else if(this.shape instanceof Konva.Ellipse){
+      const newRadiusX: number = Math.abs((this.stage.getPointerPosition()?.x as number) - this.shape.x());
+      const newRadiusY: number = Math.abs((this.stage.getPointerPosition()?.y as number) - this.shape.y());
+      this.shape.radiusX(newRadiusX);
+      this.shape.radiusY(newRadiusY);
       this.addFlag = true;
     }else{
       return;
