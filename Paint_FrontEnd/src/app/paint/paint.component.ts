@@ -18,8 +18,9 @@ export class PaintComponent implements OnInit {
   layer!: Konva.Layer;
   factory: IFactory = new Factory;
   shape!: Konva.Shape;
-  IsRectangle! : boolean;
-  IsTriangle! : boolean;
+  IsRectangle!: boolean;
+  IsTriangle!: boolean;
+  IsBrush!: boolean;
   newColor: string = "black";
 
   isNowDrawing: Boolean = false;
@@ -37,173 +38,195 @@ export class PaintComponent implements OnInit {
       width: 1536,
       container: "konva-holder"
     });
-  
+
     this.layer = new Konva.Layer;
 
     this.stage.add(this.layer);
   }
 
-  selector(){
-    
+  selector() {
+
   }
 
-  line(){
+  line() {
     this.IsTriangle = false;
+    this.IsBrush = false;
     this.shape = new Konva.Line;
-    for(let shape of this.shapeList){
+    for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
-  circle(){
+  circle() {
     this.shape = new Konva.Circle;
-    for(let shape of this.shapeList){
+    for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
-  ellipse(){
+  ellipse() {
     this.shape = new Konva.Ellipse;
-    for(let shape of this.shapeList){
+    for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
-  triangle(){
+  triangle() {
     this.IsTriangle = true;
+    this.IsBrush = false;
     this.shape = new Konva.Line;
-    for(let shape of this.shapeList){
+    for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
-  square(){
+  square() {
     this.IsRectangle = false;
     this.shape = new Konva.Rect;
-    for(let shape of this.shapeList){
+    for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
-  rect(){
+  rect() {
     this.IsRectangle = true;
     this.shape = new Konva.Rect;
-    for(let shape of this.shapeList){
+    for (let shape of this.shapeList) {
       shape.draggable(false);
     }
   }
 
-  coloring(color: string){
+  brush() {
+    this.shape = new Konva.Line;
+    this.IsBrush = true;
+    this.IsTriangle = false;
+    for (let shape of this.shapeList) {
+      shape.draggable(false);
+    }
+  }
+
+  coloring(color: string) {
     this.newColor = color;
   }
-  mouseDownHandler(){
-    if(this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon || 
-      this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse || 
-      this.shape instanceof Konva.Line){
-        this.isNowDrawing = true;
+
+
+
+
+  mouseDownHandler() {
+    if (this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon ||
+      this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse ||
+      this.shape instanceof Konva.Line) {
+      this.isNowDrawing = true;
     }
-    if(this.shape instanceof Konva.Rect && !this.IsRectangle){
+    if (this.shape instanceof Konva.Rect && !this.IsRectangle) {
       this.shape = this.factory.constructKonvaShape("square", this.stage);
-    }else if(this.shape instanceof Konva.Circle){
+    } else if (this.shape instanceof Konva.Circle) {
       this.shape = this.factory.constructKonvaShape("circle", this.stage);
-    }else if(this.shape instanceof Konva.Ellipse){
+    } else if (this.shape instanceof Konva.Ellipse) {
       this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
-    }else if(this.shape instanceof Konva.Rect && this.IsRectangle){
+    } else if (this.shape instanceof Konva.Rect && this.IsRectangle) {
       this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
-    }else if(this.shape instanceof Konva.Line && !this.IsTriangle){
+    } else if (this.shape instanceof Konva.Line && !this.IsTriangle && !this.IsBrush) {
       this.shape = this.factory.constructKonvaShape("line", this.stage);
-    }else if(this.shape instanceof Konva.Line && this.IsTriangle){
+    } else if (this.shape instanceof Konva.Line && this.IsTriangle && !this.IsBrush) {
       this.shape = this.factory.constructKonvaShape("triangle", this.stage);
-    }else{
+    } else if (this.shape instanceof Konva.Line && !this.IsTriangle && this.IsBrush) {
+      this.shape = this.factory.constructKonvaShape("brush", this.stage);
+    } else {
       return;
     }
     this.shape.stroke(this.newColor);
     this.addShape(this.shape);
   }
 
-  mouseMoveHandler(){
-    if(!this.isNowDrawing){
-      for(let shape of this.shapeList){
-        if((shape instanceof Konva.Rect) && (this.stage.getPointerPosition()?.x as number) > shape.x() && 
-        (this.stage.getPointerPosition()?.x as number) < shape.x() + shape.width() &&
-        (this.stage.getPointerPosition()?.y as number) > shape.y() &&
-        (this.stage.getPointerPosition()?.y as number) < shape.y() + shape.height()){
+  mouseMoveHandler() {
+    if (!this.isNowDrawing) {
+      for (let shape of this.shapeList) {
+        if ((shape instanceof Konva.Rect) && (this.stage.getPointerPosition()?.x as number) > shape.x() &&
+          (this.stage.getPointerPosition()?.x as number) < shape.x() + shape.width() &&
+          (this.stage.getPointerPosition()?.y as number) > shape.y() &&
+          (this.stage.getPointerPosition()?.y as number) < shape.y() + shape.height()) {
           document.documentElement.style.setProperty('--wbCursor', "grab");
           break;
-        }else{
+        } else {
           document.documentElement.style.setProperty('--wbCursor', "crosshair");
         }
       }
       return;
     }
-    if(this.shape instanceof Konva.Rect && !this.IsRectangle){
+    if (this.shape instanceof Konva.Rect && !this.IsRectangle) {
       const newWidth: number = Math.abs((this.stage.getPointerPosition()?.x as number) - this.shape.x());
       const newheight: number = Math.abs((this.stage.getPointerPosition()?.y as number) - this.shape.y());
-      if((this.stage.getPointerPosition()?.x as number) > this.shape.x()){
-        if((this.stage.getPointerPosition()?.y as number) > this.shape.y())
-          if(newWidth < newheight)
+      if ((this.stage.getPointerPosition()?.x as number) > this.shape.x()) {
+        if ((this.stage.getPointerPosition()?.y as number) > this.shape.y())
+          if (newWidth < newheight)
             this.shape.width(newWidth).height(newWidth);
           else
-           this.shape.width(newheight).height(newheight);
+            this.shape.width(newheight).height(newheight);
         else
-          if(newWidth < newheight)
+          if (newWidth < newheight)
             this.shape.width(newWidth).height(-newWidth);
           else
             this.shape.width(newheight).height(-newheight);
-      }else{
-        if((this.stage.getPointerPosition()?.y as number) > this.shape.y())
-          if(newWidth < newheight)
+      } else {
+        if ((this.stage.getPointerPosition()?.y as number) > this.shape.y())
+          if (newWidth < newheight)
             this.shape.width(-newWidth).height(newWidth);
           else
             this.shape.width(-newheight).height(newheight);
         else
-          if(newWidth < newheight)
+          if (newWidth < newheight)
             this.shape.width(-newWidth).height(-newWidth);
           else
             this.shape.width(-newheight).height(-newheight);
       }
       this.addFlag = true;
-    }else if(this.shape instanceof Konva.Rect && this.IsRectangle){
+    } else if (this.shape instanceof Konva.Rect && this.IsRectangle) {
       const newWidth: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
       const newheight: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
       this.shape.width(newWidth).height(newheight);
       this.addFlag = true;
     }
-    else if(this.shape instanceof Konva.Circle){
+    else if (this.shape instanceof Konva.Circle) {
       const rise: number = Math.pow((this.stage.getPointerPosition()?.x as number) - this.shape.x(), 2);
       const run: number = Math.pow((this.stage.getPointerPosition()?.y as number) - this.shape.y(), 2);
       const newRadius: number = Math.sqrt(rise + run);
       this.shape.radius(newRadius);
       this.addFlag = true;
-    }else if(this.shape instanceof Konva.Ellipse){
+    } else if (this.shape instanceof Konva.Ellipse) {
       const newRadiusX: number = Math.abs((this.stage.getPointerPosition()?.x as number) - this.shape.x());
       const newRadiusY: number = Math.abs((this.stage.getPointerPosition()?.y as number) - this.shape.y());
       this.shape.radiusX(newRadiusX);
       this.shape.radiusY(newRadiusY);
       this.addFlag = true;
-    }else if(this.shape instanceof Konva.Line && !this.IsTriangle){
+    } else if (this.shape instanceof Konva.Line && !this.IsTriangle && !this.IsBrush) {
       const newX: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
       const newY: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
-      this.shape.points([0,0,newX,newY]);
+      this.shape.points([0, 0, newX, newY]);
       this.addFlag = true;
-    }else if(this.shape instanceof Konva.Line && this.IsTriangle){
+    } else if (this.shape instanceof Konva.Line && this.IsTriangle && !this.IsBrush) {
       const newX: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
       const newY: number = (this.stage.getPointerPosition()?.y as number) - this.shape.y();
-      this.shape.points([0,0,newX,0,newX/2,newY,0,0]);
+      this.shape.points([0, 0, newX, 0, newX / 2, newY, 0, 0]);
+      this.addFlag = true;
+    } else if (this.shape instanceof Konva.Line && !this.IsTriangle && this.IsBrush) {
+      const newX: number = (this.stage.getPointerPosition()?.x as number);
+      const newY: number = (this.stage.getPointerPosition()?.y as number);
+      this.shape.points(this.shape.points().concat([newX, newY]));
       this.addFlag = true;
     }
-    else{
+    else {
       return;
     }
     this.layer.batchDraw();
   }
 
-  mouseUpHandler(){
-    if(this.isNowDrawing = true && this.addFlag){
-      
+  mouseUpHandler() {
+    if (this.isNowDrawing = true && this.addFlag) {
+
       this.isNowDrawing = false;
       this.shapeList.push(this.shape);
       this.addFlag = false;
-      
+
     }
     this.shape = new Konva.Shape;
-    
-    for(let shape of this.shapeList){
+
+    for (let shape of this.shapeList) {
       shape.draggable(true);
     }
   }
@@ -213,9 +236,9 @@ export class PaintComponent implements OnInit {
     this.stage.add(this.layer);
   }
 
-  clearScreen(){
+  clearScreen() {
     this.layer.destroy();
-    while(this.shapeList.length != 0) this.shapeList.pop();
+    while (this.shapeList.length != 0) this.shapeList.pop();
   }
 
 }

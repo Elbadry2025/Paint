@@ -6,7 +6,7 @@
                 <i class="fa fa-mouse-pointer"></i>
             </mat-grid-tile>
             <mat-grid-tile title="Brush">
-                <i class="fa fa-paint-brush"></i>
+                <i class="fa fa-paint-brush" (click)="brush()"></i>
             </mat-grid-tile>
             <mat-grid-tile title="Fill">
                 <i class="fa fa-square"></i>
@@ -83,34 +83,16 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button  class="colors" id="black" title="Black" (click)="coloring('black')"></button>
+                            <button class="colors" id="black" title="Black" (click)="coloring('black')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="gray" title="Gray"(click)="coloring('gray')"></button>
+                            <button class="colors" id="gray" title="Gray" (click)="coloring('gray')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="white" title="White"(click)="coloring('white')"></button>
+                            <button class="colors" id="white" title="White" (click)="coloring('white')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="brown" title="Brown"(click)="coloring('brown')"></button>
-                        </mat-grid-tile>
-                    </mat-grid-list>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile id="color-tile">
-                <div class="mini-grid-holder2">
-                    <mat-grid-list cols="2">
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="pink" title="Pink"(click)="coloring('pink')"></button>
-                        </mat-grid-tile>
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="red" title="Red"(click)="coloring('red')"></button>
-                        </mat-grid-tile>
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="rose" title="Rose"(click)="coloring('#E8ADAA')"></button>
-                        </mat-grid-tile>
-                        <mat-grid-tile id="color-tile">
-                            <button class="colors" id="gold" title="Gold"(click)="coloring('gold')"></button>
+                            <button class="colors" id="brown" title="Brown" (click)="coloring('brown')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>
@@ -119,16 +101,34 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="orange" title="Orange"(click)="coloring('orange')"></button>
+                            <button class="colors" id="pink" title="Pink" (click)="coloring('pink')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="yellow" title="Yellow"(click)="coloring('yellow')"></button>
+                            <button class="colors" id="red" title="Red" (click)="coloring('red')"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="rose" title="Rose" (click)="coloring('#E8ADAA')"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="gold" title="Gold" (click)="coloring('gold')"></button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile id="color-tile">
+                <div class="mini-grid-holder2">
+                    <mat-grid-list cols="2">
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="orange" title="Orange" (click)="coloring('orange')"></button>
+                        </mat-grid-tile>
+                        <mat-grid-tile id="color-tile">
+                            <button class="colors" id="yellow" title="Yellow" (click)="coloring('yellow')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
                             <button class="colors" id="lime" title="Lime" (click)="coloring('lime')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="lblue" title="Light Blue"(click)="coloring('#ADD8E6')"></button>
+                            <button class="colors" id="lblue" title="Light Blue" (click)="coloring('#ADD8E6')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>
@@ -137,16 +137,17 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="green" title="Green"(click)="coloring('green')"></button>
+                            <button class="colors" id="green" title="Green" (click)="coloring('green')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="turquoise" title="Turquoise"(click)="coloring('turquoise')"></button>
+                            <button class="colors" id="turquoise" title="Turquoise"
+                                (click)="coloring('turquoise')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="blue" title="Blue"(click)="coloring('blue')"></button>
+                            <button class="colors" id="blue" title="Blue" (click)="coloring('blue')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="purple" title="Purple"(click)="coloring('purple')"></button>
+                            <button class="colors" id="purple" title="Purple" (click)="coloring('purple')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>
@@ -158,6 +159,7 @@
     </div>
 </div>
 <div class="konva-align" id="xas">
-    <div id="konva-holder" (mousedown)="mouseDownHandler()" (mousemove)="mouseMoveHandler()" (mouseup)="mouseUpHandler()">
+    <div id="konva-holder" (mousedown)="mouseDownHandler()" (mousemove)="mouseMoveHandler()"
+        (mouseup)="mouseUpHandler()">
     </div>
 </div>

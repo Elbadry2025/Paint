@@ -5,7 +5,7 @@ import { IFactory } from "./ifactory";
 export class Factory implements IFactory {
     shape!: Konva.Shape;
     constructKonvaShape(type: string, stage: Konva.Stage): Konva.Shape {
-        if(type == "ellipse"){
+        if (type == "ellipse") {
             this.shape = new Konva.Ellipse({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
@@ -14,7 +14,7 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "square"){
+        } else if (type == "square") {
             this.shape = new Konva.Rect({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
@@ -23,7 +23,7 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "circle"){
+        } else if (type == "circle") {
             this.shape = new Konva.Circle({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
@@ -31,7 +31,7 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "rectangle"){
+        } else if (type == "rectangle") {
             this.shape = new Konva.Rect({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
@@ -40,19 +40,27 @@ export class Factory implements IFactory {
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "line"){
+        } else if (type == "line") {
             this.shape = new Konva.Line({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
-                points:[0,0],
+                points: [0, 0],
                 stroke: "black",
                 draggable: true
             })
-        }else if(type == "triangle"){
+        } else if (type == "triangle") {
             this.shape = new Konva.Line({
                 x: stage.getPointerPosition()?.x,
                 y: stage.getPointerPosition()?.y,
-                points:[0,0,0,0,0,0,0,0],
+                points: [0, 0, 0, 0, 0, 0, 0, 0],
+                stroke: "black",
+                draggable: true
+            })
+        } else if (type == "brush") {
+            this.shape = new Konva.Line({
+                x: stage.getPointerPosition()?.x,
+                y: stage.getPointerPosition()?.y,
+                points: [],
                 stroke: "black",
                 draggable: true
             })
@@ -62,5 +70,5 @@ export class Factory implements IFactory {
     constructBackEndShape(): IShape {
         throw new Error("Method not implemented.");
     }
-    
+
 }
