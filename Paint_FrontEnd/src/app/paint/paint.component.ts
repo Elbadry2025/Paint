@@ -28,6 +28,7 @@ export class PaintComponent implements OnInit {
   isTriangle!: boolean;
   isBrush!: boolean;
   isSelecting!: boolean;
+  isFill!: boolean;
 
   newColor: string = "black";
   red: number = 0
@@ -161,6 +162,9 @@ export class PaintComponent implements OnInit {
       x.style.backgroundColor = this.newColor;
     this.newColor;
   }
+  Fill(){
+    this.isFill = true;
+  }
   mouseDownHandler(){
     if(this.isSelecting){
       for(let shape of this.shapeList){
@@ -172,6 +176,10 @@ export class PaintComponent implements OnInit {
         }
         if(e.target instanceof Konva.Shape){
           this.tr.nodes([e.target]);
+        }
+        if(e.target instanceof Konva.Shape && this.isFill){
+          e.target.fill(this.newColor);
+          this.isFill = false;
         }
         this.tr.setAttrs({
           keepRatio: false,
@@ -330,7 +338,9 @@ export class PaintComponent implements OnInit {
 
   clearScreen(){
     this.layer.destroy();
+    this.stage.destroy();
     while(this.shapeList.length != 0) this.shapeList.pop();
+    this.ngOnInit();
   }
 
 }
