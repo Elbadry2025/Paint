@@ -6,7 +6,48 @@ import { IFactory } from "./ifactory";
 export class Factory implements IFactory {
     shape!: Konva.Shape;
     backendShape!: IShape;
-    constructKonvaShape(type: string, stage: Konva.Stage): Konva.Shape {
+    constructKonvaShape(type: string, stage: Konva.Stage, isPaste: boolean , copyShape: Konva.Shape): Konva.Shape {
+        if(isPaste){
+            if(copyShape instanceof Konva.Rect){
+                this.shape = new Konva.Rect({
+                    x : stage.getPointerPosition()?.x,
+                    y : stage.getPointerPosition()?.y,
+                    width: copyShape.width(),
+                    height: copyShape.height(),
+                    stroke: copyShape.stroke(),
+                    fill: copyShape.fill(),
+                    draggable: true
+                })
+           }else if(copyShape instanceof Konva.Line){
+            this.shape = new Konva.Line({
+                x: stage.getPointerPosition()?.x,
+                y: stage.getPointerPosition()?.y,
+                points: copyShape.points(),
+                stroke: copyShape.stroke(),
+                fill: copyShape.fill(),
+                draggable: true
+            })
+           }else if(copyShape instanceof Konva.Circle){
+                this.shape = new Konva.Circle({
+                    x : stage.getPointerPosition()?.x,
+                    y : stage.getPointerPosition()?.y,
+                    radius: copyShape.radius(),
+                    stroke: copyShape.stroke(),
+                    fill: copyShape.fill(),
+                    draggable: true
+                })
+           }else if(copyShape instanceof Konva.Ellipse){
+                this.shape = new Konva.Ellipse({
+                    x : stage.getPointerPosition()?.x,
+                    y : stage.getPointerPosition()?.y,
+                    radiusX: copyShape.radiusX(),
+                    radiusY: copyShape.radiusY(),
+                    fill: copyShape.fill(),
+                    stroke: copyShape.stroke(),
+                    draggable: true
+                })
+           }
+        }else{
         if (type == "ellipse") {
             this.shape = new Konva.Ellipse({
                 x: stage.getPointerPosition()?.x,
@@ -67,6 +108,7 @@ export class Factory implements IFactory {
                 draggable: true
             })
         }
+    }
         return this.shape;
     }
     constructBackEndShape(type: string): IShape {

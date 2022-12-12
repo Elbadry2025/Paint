@@ -7,6 +7,7 @@ import { IFactory } from '../Factory/ifactory';
 import { Factory } from '../Factory/factory';
 import { SendService } from '../Service/send.service';
 import { FormsModule } from '@angular/forms'
+import { FastLayer } from 'konva/lib/FastLayer';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class PaintComponent implements OnInit {
 
   factory: IFactory = new Factory;
   shape: any;
+  copyShape!: Konva.Shape;
   prev_shape!: Konva.Shape;
 
   isRectangle!: boolean;
@@ -30,7 +32,9 @@ export class PaintComponent implements OnInit {
   isSelecting!: boolean;
   isFill!: boolean;
   isErase! : boolean;
-
+  isCopy!: boolean;
+  isPaste!: boolean;
+  
   newColor: string = "black";
   red: number = 0
   green: number = 0;
@@ -59,21 +63,35 @@ export class PaintComponent implements OnInit {
     this.tr = new Konva.Transformer;
   }
 
-  selector(){
+  clear(){
     this.isTriangle = false;
     this.isBrush = false;
-    this.shape = null;
-    this.isSelecting = true;
+    this.isSelecting = false;
     this.isErase = false;
     this.isFill = false;
+    this.isCopy = false;
+    this.isPaste = false;
+    this.isRectangle = false;
+  }
+  selector(){
+    this.shape = null;
+    this.clear();
+    this.isSelecting = true;
     for (let shape of this.shapeList) {
       shape.draggable(true);
     }
   }
+  copy(){
+    this.clear();
+    this.isSelecting = true;
+    this.isCopy = true;
+  }
+  paste(){
+    this.clear();
+    this.isPaste = true;
+  }
   line(){
-    this.isSelecting = false;
-    this.isTriangle = false;
-    this.isBrush = false;
+    this.clear();
     this.shape = new Konva.Line;
     this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
@@ -81,7 +99,7 @@ export class PaintComponent implements OnInit {
     }
   }
   circle(){
-    this.isSelecting = false;
+    this.clear();
     this.shape = new Konva.Circle;
     this.prev_shape = this.shape;
     for(let shape of this.shapeList){
@@ -89,7 +107,7 @@ export class PaintComponent implements OnInit {
     }
   }
   ellipse(){
-    this.isSelecting = false;
+    this.clear();
     this.shape = new Konva.Ellipse;
     this.prev_shape = this.shape;
     for(let shape of this.shapeList){
@@ -97,9 +115,8 @@ export class PaintComponent implements OnInit {
     }
   }
   triangle(){
-    this.isSelecting = false;
+    this.clear();
     this.isTriangle = true;
-    this.isBrush = false;
     this.shape = new Konva.Line;
     this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
@@ -107,8 +124,7 @@ export class PaintComponent implements OnInit {
     }
   }
   square() {
-    this.isSelecting = false;
-    this.isRectangle = false;
+    this.clear();
     this.shape = new Konva.Rect;
     this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
@@ -116,7 +132,7 @@ export class PaintComponent implements OnInit {
     }
   }
   rect() {
-    this.isSelecting = false;
+    this.clear();
     this.isRectangle = true;
     this.shape = new Konva.Rect;
     this.prev_shape = this.shape;
@@ -125,9 +141,8 @@ export class PaintComponent implements OnInit {
     }
   }
   brush() {
-    this.isSelecting = false;
+    this.clear();
     this.isBrush = true;
-    this.isTriangle = false;
     this.shape = new Konva.Line;
     this.prev_shape = this.shape;
     for (let shape of this.shapeList) {
@@ -166,10 +181,12 @@ export class PaintComponent implements OnInit {
     this.newColor;
   }
   Fill(){
+    this.clear();
     this.isFill = true;
     this.isSelecting = true;
   }
   Erase(){
+    this.clear();
     this.isErase = true;
     this.isSelecting = true;
   }
@@ -187,11 +204,13 @@ export class PaintComponent implements OnInit {
         }
         if(e.target instanceof Konva.Shape && this.isFill){
           e.target.fill(this.newColor);
-          
         }
         if(e.target instanceof Konva.Shape && this.isErase){
           e.target.destroy();
-          
+        }
+        if(e.target instanceof Konva.Shape && this.isCopy){
+          this.copyShape = e.target;
+          console.log('copy complete');
         }
         this.tr.setAttrs({
           keepRatio: false,
@@ -212,32 +231,40 @@ export class PaintComponent implements OnInit {
     }
     this.shape = this.prev_shape;
     if(this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon || 
-      this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse || 
+      this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse ||
       this.shape instanceof Konva.Line){
         this.isNowDrawing = true;
     }
+    if(this.isPaste){
+      console.log('paste complete');
+      this.shape = this.copyShape;
+
+    }
     if (this.shape instanceof Konva.Rect && !this.isRectangle) {
-      this.shape = this.factory.constructKonvaShape("square", this.stage);
+      this.shape = this.factory.constructKonvaShape("square", this.stage, this.isPaste, this.copyShape);
     } else if (this.shape instanceof Konva.Circle) {
-      this.shape = this.factory.constructKonvaShape("circle", this.stage);
+      this.shape = this.factory.constructKonvaShape("circle", this.stage, this.isPaste, this.copyShape);
     } else if (this.shape instanceof Konva.Ellipse) {
-      this.shape = this.factory.constructKonvaShape("ellipse", this.stage);
+      this.shape = this.factory.constructKonvaShape("ellipse", this.stage, this.isPaste, this.copyShape);
     } else if (this.shape instanceof Konva.Rect && this.isRectangle) {
-      this.shape = this.factory.constructKonvaShape("rectangle", this.stage);
+      this.shape = this.factory.constructKonvaShape("rectangle", this.stage, this.isPaste, this.copyShape);
     } else if (this.shape instanceof Konva.Line && !this.isTriangle && !this.isBrush) {
-      this.shape = this.factory.constructKonvaShape("line", this.stage);
+      this.shape = this.factory.constructKonvaShape("line", this.stage, this.isPaste, this.copyShape);
     } else if (this.shape instanceof Konva.Line && this.isTriangle && !this.isBrush) {
-      this.shape = this.factory.constructKonvaShape("triangle", this.stage);
+      this.shape = this.factory.constructKonvaShape("triangle", this.stage, this.isPaste, this.copyShape);
     } else if (this.shape instanceof Konva.Line && !this.isTriangle && this.isBrush) {
-      this.shape = this.factory.constructKonvaShape("brush", this.stage);
+      this.shape = this.factory.constructKonvaShape("brush", this.stage, this.isPaste, this.copyShape);
     } else {
       return;
     }
-    this.shape.stroke(this.newColor);
+    if(!this.isPaste){
+      this.shape.stroke(this.newColor);
+    }
     this.addShape(this.shape);
   }
 
   mouseMoveHandler(){
+    if(!this.isPaste){
     if (this.isSelecting) {
       for (let shape of this.shapeList) {
         if ((shape instanceof Konva.Rect) && (this.stage.getPointerPosition()?.x as number) > shape.x() &&
@@ -317,6 +344,7 @@ export class PaintComponent implements OnInit {
     else {
       return;
     }
+  }
     this.layer.batchDraw();
   }
 
