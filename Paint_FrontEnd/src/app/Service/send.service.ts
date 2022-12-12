@@ -8,7 +8,7 @@ const httpOptions: Object = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
     Authorization: 'my-auth-token'
-  }), responseType: 'string'
+  }), responseType: 'text'
 };
 
 @Injectable({
@@ -20,7 +20,7 @@ export class SendService {
 
   sendShape(shape: IShape): Observable<string>{
     if(shape instanceof Square){
-      return this.http.post<string>(`http://localhost:8080/connect/create/${shape.type}`, shape, httpOptions);
+      return this.http.post<string>(`http://localhost:8080/connect/create/${shape.type}`, JSON.stringify(shape), httpOptions);
     }else{
       return this.http.post<string>(`http://localhost:8080/connect/create/${shape.type}`, JSON.stringify({
         "_x": null,
@@ -33,6 +33,10 @@ export class SendService {
         "_type": null,
       }), httpOptions);
     }
+  }
+
+  restart(): any{
+    return this.http.post<any>(`http://localhost:8080/connect/create/restart`, httpOptions);
   }
 
 }

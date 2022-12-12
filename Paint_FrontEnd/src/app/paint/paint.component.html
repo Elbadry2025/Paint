@@ -49,10 +49,10 @@
     </div>
     <div class="grid-holder3">
         <mat-grid-list cols="2">
-            <mat-grid-tile title="Undo">
+            <mat-grid-tile title="Undo" (click)="undo()">
                 <i class="fa fa-undo"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Redo">
+            <mat-grid-tile title="Redo" (click)="redo()">
                 <i class="fa fa-repeat"></i>
             </mat-grid-tile>
         </mat-grid-list>
@@ -101,13 +101,13 @@
                 <div class="mini-grid-holder2">
                     <mat-grid-list cols="2">
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="pink" title="Pink" (click)="coloring('pink')"></button>
+                            <button class="colors" id="pink" title="Pink" (click)="coloring('rgb(248, 15, 198)')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
                             <button class="colors" id="red" title="Red" (click)="coloring('red')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="rose" title="Rose" (click)="coloring('#E8ADAA')"></button>
+                            <button class="colors" id="rose" title="Rose" (click)="coloring('rgb(246, 95, 121)')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
                             <button class="colors" id="gold" title="Gold" (click)="coloring('gold')"></button>
@@ -128,7 +128,7 @@
                             <button class="colors" id="lime" title="Lime" (click)="coloring('lime')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="lblue" title="Light Blue" (click)="coloring('#ADD8E6')"></button>
+                            <button class="colors" id="lblue" title="Light Blue" (click)="coloring('lightskyblue')"></button>
                         </mat-grid-tile>
                     </mat-grid-list>
                 </div>
@@ -140,8 +140,7 @@
                             <button class="colors" id="green" title="Green" (click)="coloring('green')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
-                            <button class="colors" id="turquoise" title="Turquoise"
-                                (click)="coloring('turquoise')"></button>
+                            <button class="colors" id="turquoise" title="Turquoise" (click)="coloring('turquoise')"></button>
                         </mat-grid-tile>
                         <mat-grid-tile id="color-tile">
                             <button class="colors" id="blue" title="Blue" (click)="coloring('blue')"></button>
@@ -155,25 +154,25 @@
         </mat-grid-list>
     </div>
     <style>
-    input[type="range"]{
-        -webkit-appearance: none;
-        height: 10px;
-        width: 80%;
-        border-radius: 10%;
-        outline: none;
-    
-    }
-    input[type = "range"]::-webkit-slider-thumb{
-        -webkit-appearance: none;
-        height: 15px;
-        width: 15px;
-        background-color: white;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-</style>
+        input[type="range"]{
+            -webkit-appearance: none;
+            height: 10px;
+            width: 80%;
+            border-radius: 10%;
+            outline: none;
+        
+        }
+        input[type = "range"]::-webkit-slider-thumb{
+            -webkit-appearance: none;
+            height: 15px;
+            width: 15px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
     <div class="more-colors">
-        Result: <input type = "text" id = "box">
+        <input type = "text" id = "box">
         <input (change)="setRed($event)" name="red_rgb" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
         <input (change)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
         <input (change)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">

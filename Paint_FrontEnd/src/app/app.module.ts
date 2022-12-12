@@ -9,6 +9,7 @@ import { MatGridListModule } from '@angular/material/grid-list'
 import { MatIconModule } from '@angular/material/icon'
 import { SendService } from './Service/send.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RecieveService } from './Service/recieve.service';
 
 
 @NgModule({
@@ -23,7 +24,10 @@ import { HttpClientModule } from '@angular/common/http';
     MatGridListModule,
     HttpClientModule
   ],
-  providers: [SendService],
+  providers: [
+    SendService,
+    RecieveService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -11,11 +11,11 @@ export abstract class IShape {
 
     private _draggable: boolean;
     
-    private _id: number;
+    private _id: string;
     
     private _type: string = "";
 
-    constructor(x: number, y: number, stroke: string, fill: string, rotate: number, draggable: boolean, id: number){
+    constructor(x: number, y: number, stroke: string, fill: string, rotate: number, draggable: boolean, id: string){
         this._x = x;
         this._y = y;
         this._stroke = stroke;
@@ -61,10 +61,10 @@ export abstract class IShape {
     public set draggable(value: boolean) {
         this._draggable = value;
     }
-    public get id(): number {
+    public get id(): string {
         return this._id;
     }
-    public set id(value: number) {
+    public set id(value: string) {
         this._id = value;
     }
     public get type(): string {

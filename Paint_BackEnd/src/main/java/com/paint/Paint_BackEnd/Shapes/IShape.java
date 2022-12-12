@@ -7,9 +7,18 @@ public class IShape {
     private String _fill;
     private int _rotate;
     private boolean _draggable;
-    private int _id;
+    private String _id;
     private String _type;
 
+    IShape(int x, int y, String stroke, String fill, int rotate, boolean draggable, String id){
+        this._x = x;
+        this._y = y;
+        this._stroke = stroke;
+        this._fill = fill;
+        this._rotate = rotate;
+        this._draggable = draggable;
+        this._id = id;
+    }
 
     public int get_x() {
         return _x;
@@ -59,11 +68,11 @@ public class IShape {
         this._draggable = _draggable;
     }
 
-    public int get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(int _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 
