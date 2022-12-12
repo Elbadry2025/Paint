@@ -29,6 +29,7 @@ export class PaintComponent implements OnInit {
   isBrush!: boolean;
   isSelecting!: boolean;
   isFill!: boolean;
+  isErase! : boolean;
 
   newColor: string = "black";
   red: number = 0
@@ -63,6 +64,8 @@ export class PaintComponent implements OnInit {
     this.isBrush = false;
     this.shape = null;
     this.isSelecting = true;
+    this.isErase = false;
+    this.isFill = false;
     for (let shape of this.shapeList) {
       shape.draggable(true);
     }
@@ -164,6 +167,11 @@ export class PaintComponent implements OnInit {
   }
   Fill(){
     this.isFill = true;
+    this.isSelecting = true;
+  }
+  Erase(){
+    this.isErase = true;
+    this.isSelecting = true;
   }
   mouseDownHandler(){
     if(this.isSelecting){
@@ -174,12 +182,16 @@ export class PaintComponent implements OnInit {
         if(!(e.target instanceof Konva.Shape)){
           this.tr.nodes([]);
         }
-        if(e.target instanceof Konva.Shape){
+        if(e.target instanceof Konva.Shape && !this.isFill && !this.isErase){
           this.tr.nodes([e.target]);
         }
         if(e.target instanceof Konva.Shape && this.isFill){
           e.target.fill(this.newColor);
-          this.isFill = false;
+          
+        }
+        if(e.target instanceof Konva.Shape && this.isErase){
+          e.target.destroy();
+          
         }
         this.tr.setAttrs({
           keepRatio: false,
