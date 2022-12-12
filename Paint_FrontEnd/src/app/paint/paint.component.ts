@@ -6,6 +6,7 @@ import { Square } from '../Shapes/square';
 import { IFactory } from '../Factory/ifactory';
 import { Factory } from '../Factory/factory';
 import { SendService } from '../Service/send.service';
+import { FormsModule } from '@angular/forms'
 
 
 @Component({
@@ -27,9 +28,11 @@ export class PaintComponent implements OnInit {
   isTriangle!: boolean;
   isBrush!: boolean;
   isSelecting!: boolean;
-  isFill!: boolean;
 
   newColor: string = "black";
+  red: number = 0
+  green: number = 0;
+  blue: number = 0;
 
   isNowDrawing: Boolean = false;
   cursor: string = "default";
@@ -129,11 +132,35 @@ export class PaintComponent implements OnInit {
   }
   coloring(color: string) {
     this.newColor = color;
-  }
-  Fill(){
-    this.isFill = true;
-  }
+    var x = document.getElementById('box');
+    if(x == null){
 
+    }else
+      x.style.backgroundColor = this.newColor;
+    this.newColor;
+  }
+  setRed(event : any){
+    this.red = event.target.value;
+    this.rgb(this.red,this.green,this.blue);
+  }
+  setGreen(event : any){
+    this.green = event.target.value;
+    this.rgb(this.red,this.green,this.blue);
+  }
+  setBlue(event : any){
+    this.blue = event.target.value;
+    this.rgb(this.red,this.green,this.blue);
+  }
+  rgb(red : number, green : number, blue : number ){
+    this.newColor= 'rgb('+red+','+green+','+blue+')';
+    console.log(this.newColor);
+    var x = document.getElementById('box');
+    if(x == null){
+
+    }else
+      x.style.backgroundColor = this.newColor;
+    this.newColor;
+  }
   mouseDownHandler(){
     if(this.isSelecting){
       for(let shape of this.shapeList){
@@ -144,11 +171,7 @@ export class PaintComponent implements OnInit {
           this.tr.nodes([]);
         }
         if(e.target instanceof Konva.Shape){
-          this.tr.nodes([e.target]); 
-        }
-        if(e.target instanceof Konva.Shape && this.isFill){
-          e.target.fill(this.newColor); 
-          this.isFill = false;            
+          this.tr.nodes([e.target]);
         }
         this.tr.setAttrs({
           keepRatio: false,

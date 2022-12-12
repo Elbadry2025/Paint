@@ -8,7 +8,7 @@
             <mat-grid-tile title="Brush" (click)="brush()">
                 <i class="fa fa-paint-brush" ></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Fill" (click)="Fill()" (click)="selector()">
+            <mat-grid-tile title="Fill">
                 <i class="fa fa-square"></i>
             </mat-grid-tile>
             <mat-grid-tile title="Erase shape">
@@ -154,8 +154,29 @@
             </mat-grid-tile>
         </mat-grid-list>
     </div>
+    <style>
+    input[type="range"]{
+        -webkit-appearance: none;
+        height: 10px;
+        width: 80%;
+        border-radius: 10%;
+        outline: none;
+    
+    }
+    input[type = "range"]::-webkit-slider-thumb{
+        -webkit-appearance: none;
+        height: 15px;
+        width: 15px;
+        background-color: white;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+</style>
     <div class="more-colors">
-        <textarea class="rgb-value" placeholder="RGB"></textarea>
+        Result: <input type = "text" id = "box">
+        <input (change)="setRed($event)" name="red_rgb" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
+        <input (change)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
+        <input (change)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">
     </div>
 </div>
 <div class="konva-align" id="xas">

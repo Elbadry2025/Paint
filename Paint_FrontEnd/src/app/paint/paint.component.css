@@ -73,11 +73,37 @@
     top: 1px;
     width: 50px;
 }
-
+#box{
+    height: 10px;
+    width: 100px;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    background-color: white;
+}
+#red_rgb, #blue_rgb, #green_rgb{
+    height: 10px;
+    width: 100px;
+    border-radius: 50px;
+    border: 1px solid silver;
+}
+.more-colors #red_rgb{
+    background: linear-gradient(90deg, #000, red);
+    
+}
+.more-colors #green_rgb{
+    background: linear-gradient(90deg, #000, green);
+}
+.more-colors #blue_rgb{
+    background: linear-gradient(90deg, #000, blue);
+}
 .more-colors{
     position: relative;
-    left: 17.5%;
-    top: 35%;
+    left: 15.5%;
+    place-items: center;
+    display:grid;
+    color: red;
+    font-family: Verdana;
 }
 
 .rgb-value{
