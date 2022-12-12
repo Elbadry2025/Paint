@@ -27,6 +27,7 @@ export class PaintComponent implements OnInit {
   isTriangle!: boolean;
   isBrush!: boolean;
   isSelecting!: boolean;
+  isFill!: boolean;
 
   newColor: string = "black";
 
@@ -129,6 +130,9 @@ export class PaintComponent implements OnInit {
   coloring(color: string) {
     this.newColor = color;
   }
+  Fill(){
+    this.isFill = true;
+  }
 
   mouseDownHandler(){
     if(this.isSelecting){
@@ -140,7 +144,11 @@ export class PaintComponent implements OnInit {
           this.tr.nodes([]);
         }
         if(e.target instanceof Konva.Shape){
-          this.tr.nodes([e.target]);
+          this.tr.nodes([e.target]); 
+        }
+        if(e.target instanceof Konva.Shape && this.isFill){
+          e.target.fill(this.newColor); 
+          this.isFill = false;            
         }
         this.tr.setAttrs({
           keepRatio: false,
