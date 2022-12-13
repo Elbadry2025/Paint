@@ -5,7 +5,7 @@
     display: flex;
     top: 5px;
     left: 200px;
-    width: 1115px;
+    width: 1160px;
     height: 103px;
     border-radius: 50px;
     border: 1px solid yellow;
@@ -250,4 +250,15 @@ mat-grid-tile:active{
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
     border: 3px solid silver;
+}
+.font{
+    position: relative;
+    left: 17.5%;
+    place-items: center;
+    display:grid;
+    resize:false;
+    font-family: Verdana;
+}
+#txt{
+    resize:none;
 }
