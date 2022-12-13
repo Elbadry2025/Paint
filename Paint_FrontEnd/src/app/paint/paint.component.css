@@ -5,7 +5,7 @@
     display: flex;
     top: 5px;
     left: 200px;
-    width: 1160px;
+    width: 1260px;
     height: 103px;
     border-radius: 50px;
     border: 1px solid yellow;
@@ -88,7 +88,7 @@
     position: relative;
     left: 10px;
     height: 10px;
-    width: 60px;
+    width: 90px;
     border-radius: 50px;
     border: 1px solid silver;
 }
@@ -109,6 +109,26 @@
     display:grid;
     color: red;
     font-family: Verdana;
+}
+.font{
+    position: relative;
+    height: 70px;
+    left: 17.25%;
+    place-items: center;
+    display:grid;
+    font-family: Verdana;
+    color: white;
+}
+#txt{
+    position: relative;
+    left: 10px;
+    height: 10px;
+    width: 85px;
+    border-radius: 50px;
+    border: 1px solid silver;
+}
+.font #txt{
+    background: gray;
 }
 
 .rgb-value{
@@ -250,15 +270,4 @@ mat-grid-tile:active{
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
     border: 3px solid silver;
-}
-.font{
-    position: relative;
-    left: 17.5%;
-    place-items: center;
-    display:grid;
-    resize:false;
-    font-family: Verdana;
-}
-#txt{
-    resize:none;
 }

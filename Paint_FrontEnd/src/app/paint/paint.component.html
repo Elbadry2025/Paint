@@ -173,12 +173,13 @@
     </style>
     <div class="more-colors">
         <input type = "text" id = "box">
-        <input (input)="setRed($event)" name="red_rgb" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
+        <input (input)="setRed($event)" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
         <input (input)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
         <input (input)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">
     </div>
     <div class="font">
-        <textarea name="font" id="txt" cols="4" rows="2"></textarea>
+        <p>&nbsp;&nbsp;&nbsp;Fontsize:</p>
+        <input (input)="setFont($event)" type ="range" id = "txt" value ="0" min="0" max="100">
     </div>
 </div>
 

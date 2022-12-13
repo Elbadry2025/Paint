@@ -17,6 +17,7 @@ export class Factory implements IFactory {
                     width: copyShape.width(),
                     height: copyShape.height(),
                     stroke: copyShape.stroke(),
+                    strokeWidth: copyShape.strokeWidth(),
                     fill: copyShape.fill(),
                     draggable: false
                 })
@@ -26,6 +27,7 @@ export class Factory implements IFactory {
                 y: stage.getPointerPosition()?.y,
                 points: copyShape.points(),
                 stroke: copyShape.stroke(),
+                strokeWidth: copyShape.strokeWidth(),
                 fill: copyShape.fill(),
                 draggable: false
             })
@@ -35,6 +37,7 @@ export class Factory implements IFactory {
                     y : stage.getPointerPosition()?.y,
                     radius: copyShape.radius(),
                     stroke: copyShape.stroke(),
+                    strokeWidth: copyShape.strokeWidth(),
                     fill: copyShape.fill(),
                     draggable: false
                 })
@@ -46,6 +49,7 @@ export class Factory implements IFactory {
                     radiusY: copyShape.radiusY(),
                     fill: copyShape.fill(),
                     stroke: copyShape.stroke(),
+                    strokeWidth: copyShape.strokeWidth(),
                     draggable: false
                 })
            }

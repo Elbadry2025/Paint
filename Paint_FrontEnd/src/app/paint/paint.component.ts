@@ -35,6 +35,7 @@ export class PaintComponent implements OnInit {
   isCopy!: boolean;
   isPaste!: boolean;
 
+  font: number = 1;
   newColor: string = "black";
   red: number = 0
   green: number = 0;
@@ -186,7 +187,9 @@ export class PaintComponent implements OnInit {
 
     }else
       x.style.backgroundColor = this.newColor;
-    this.newColor;
+  }
+  setFont(event: any){
+    this.font = event.target.value;
   }
   Fill(){
     this.clear();
@@ -267,6 +270,7 @@ export class PaintComponent implements OnInit {
     }
     if(!this.isPaste){
       this.shape.stroke(this.newColor);
+      this.shape.strokeWidth(this.font);
     }
     this.addShape(this.shape);
   }
