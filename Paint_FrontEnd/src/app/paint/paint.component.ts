@@ -35,7 +35,8 @@ export class PaintComponent implements OnInit {
   isCopy!: boolean;
   isPaste!: boolean;
 
-  font: number = 1;
+  font!: number;
+  font_temp!:number;
   newColor: string = "black";
   red: number = 0
   green: number = 0;
@@ -188,8 +189,20 @@ export class PaintComponent implements OnInit {
     }else
       x.style.backgroundColor = this.newColor;
   }
-  setFont(event: any){
-    this.font = event.target.value;
+  setFont(item: any){
+    if(item.target.value == 0){
+      this.font = 0;
+    }else if(item.target.value == 5){
+      this.font = 5;
+    }else if(item.target.value == 10){
+      this.font = 10;
+    }else if(item.target.value == 15){
+      this.font = 15;
+    }else if(item.target.value == 20){
+      this.font = 20;
+    }else if(item.target.value == 25){
+      this.font = 25;
+    }
   }
   Fill(){
     this.clear();
