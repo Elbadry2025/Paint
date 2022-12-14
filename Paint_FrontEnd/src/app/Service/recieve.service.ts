@@ -10,6 +10,12 @@ const httpOptions: Object = {
     Authorization: 'my-auth-token'
   }), responseType: 'text'
 };
+const httpOptions2: Object = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    Authorization: 'my-auth-token'
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +30,9 @@ export class RecieveService {
   }
   redo(): Observable<string>{
     return this.http.get<string>(`http://localhost:8080/connect/redo`, httpOptions);
+  }
+  load(): Observable<string> {
+    return this.http.get<string>(`http://localhost:8080/connect/load`, httpOptions2);
   }
 
 }

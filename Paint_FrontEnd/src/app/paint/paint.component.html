@@ -2,19 +2,19 @@
 <div class="tools">
     <div class="grid-holder">
         <mat-grid-list cols="6">
-            <mat-grid-tile title="Selector" (click)="selector()">
+            <mat-grid-tile title="Selector" id="selector" (click)="selector()">
                 <i class="fa fa-mouse-pointer"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Brush" (click)="brush()">
+            <mat-grid-tile title="Brush" id="brush" (click)="brush()">
                 <i class="fa fa-paint-brush" ></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Fill" (click)="Fill()">
+            <mat-grid-tile title="Fill" id="fill" (click)="Fill()">
                 <i class="fa fa-square"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Erase shape" (click)="Erase()" >
+            <mat-grid-tile title="Erase shape" id="eraser" (click)="Erase()" >
                 <i class="fa fa-eraser"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Clear screen" (click)="clearScreen()">
+            <mat-grid-tile title="Clear screen" id="clear" (click)="clearScreen()">
                 <i class="fa fa-trash"></i>
             </mat-grid-tile>
             <mat-grid-tile>
@@ -49,30 +49,30 @@
     </div>
     <div class="grid-holder3">
         <mat-grid-list cols="2">
-            <mat-grid-tile title="Undo" (click)="undo()">
+            <mat-grid-tile title="Undo" id="undo" (click)="undo()">
                 <i class="fa fa-undo"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Redo" (click)="redo()">
+            <mat-grid-tile title="Redo" id="redo" (click)="redo()">
                 <i class="fa fa-repeat"></i>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
     <div class="grid-holder4">
         <mat-grid-list cols="2">
-            <mat-grid-tile title="Save">
+            <mat-grid-tile title="Save" id="save" (click)="save()">
                 <i class="fa fa-save"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Load">
+            <mat-grid-tile title="Load" id="load" (click)="load()">
                 <i class="fa fa-upload"></i>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
     <div class="grid-holder5">
         <mat-grid-list cols="2">
-            <mat-grid-tile title="Copy" (click)="copy()">
+            <mat-grid-tile title="Copy" id="copy" (click)="copy()">
                 <i class="fa fa-copy"></i>
             </mat-grid-tile>
-            <mat-grid-tile title="Paste" (click)="paste()">
+            <mat-grid-tile title="Paste" id="paste" (click)="paste()">
                 <i class="fa fa-paste"></i>
             </mat-grid-tile>
         </mat-grid-list>
@@ -172,17 +172,16 @@
         }
     </style>
     <div class="more-colors">
-        <input type = "text" id = "box">
-        <input (input)="setRed($event)" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
-        <input (input)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
-        <input (input)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">
+        <div id = "box"></div>
+        <input (change)="setRed($event)" name="red_rgb" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
+        <input (change)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
+        <input (change)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">
     </div>
     <div class="font">
-        <p>&nbsp;&nbsp;&nbsp;Fontsize:</p>
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">&nbsp;&nbsp;&nbsp;Fontsize:</p>
         <input (input)="setFont($event)" type ="range" id = "txt" value ="0" min="0" max="25" step="5">
     </div>
 </div>
-
 <div class="konva-align" id="xas">
     <div id="konva-holder" (mousedown)="mouseDownHandler()" (mousemove)="mouseMoveHandler()"
         (mouseup)="mouseUpHandler()">

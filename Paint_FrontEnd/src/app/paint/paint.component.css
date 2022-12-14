@@ -4,60 +4,62 @@
     position: absolute;
     display: flex;
     top: 5px;
-    left: 130px;
-    width: 1260px;
+    left: 140px;
+    width: 1250px;
     height: 103px;
     border-radius: 50px;
-    border: 1px solid yellow;
-    background: #1d1d1d;
+    background: rgb(46, 46, 85);
 }
 
 .konva-align{
+    border: 3px solid rgb(46, 46, 85);
+    border-radius: 40px;
     position: absolute;
-    top: 108px;
-    left: 0%;
+    top: 120px;
+    left: 60px;
     cursor: var(--wbCursor);
 }
+
 
 .grid-holder{
     position: relative;
     top: 25%;
-    left: 5%;
+    left: 4%;
     width: 300px;
 }
 
 .grid-holder2{
     position: relative;
     top: 25%;
-    left: 5.1%;
+    left: 4.1%;
     width: 24px;
 }
 
 .grid-holder3{
     position: relative;
     top: 25%;
-    left: 7.5%;
+    left: 6.5%;
     width: 100px;
 }
 
 .grid-holder4{
     position: relative;
     top: 25%;
-    left: 10%;
+    left: 9%;
     width: 100px;
 }
 
 .grid-holder5{
     position: relative;
     top: 25%;
-    left: 12.5%;
+    left: 11.5%;
     width: 100px;
 }
 
 .grid-holder6{
     position: relative;
     top: 25%;
-    left: 15%;
+    left: 14%;
     width: 200px;
 }
 
@@ -82,13 +84,13 @@
     border: none;
     outline: none;
     border-radius: 50%;
-    background-color: white;
+    background-color: black;
 }
 #red_rgb, #blue_rgb, #green_rgb{
     position: relative;
     left: 10px;
     height: 10px;
-    width: 90px;
+    width: 60px;
     border-radius: 50px;
     border: 1px solid silver;
 }
@@ -110,6 +112,7 @@
     color: red;
     font-family: Verdana;
 }
+
 .font{
     position: relative;
     height: 70px;
@@ -142,6 +145,7 @@
 
 mat-grid-tile {
     border: 1px solid;
+    border-radius: 10%;
     border-color: rgba(246, 246, 246, 0.529);
     font-size: 20px;
     color: rgba(246, 246, 246, 0.529);

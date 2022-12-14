@@ -8,6 +8,8 @@ import { Factory } from '../Factory/factory';
 import { SendService } from '../Service/send.service';
 import { IShape } from '../Shapes/ishape';
 import { RecieveService } from '../Service/recieve.service';
+import { Shape, ShapeConfig } from 'konva/lib/Shape';
+import { GetSet } from 'konva/lib/types';
 
 
 @Component({
@@ -24,7 +26,8 @@ export class PaintComponent implements OnInit {
   factory: IFactory = new Factory;
   shape: any;
   copyShape!: Konva.Shape;
-  prev_shape!: Konva.Shape;
+  prevShape!: Konva.Shape;
+  selectedShape: any = null;
 
   isRectangle!: boolean;
   isTriangle!: boolean;
@@ -42,6 +45,11 @@ export class PaintComponent implements OnInit {
   green: number = 0;
   blue: number = 0;
 
+  x!: number;
+  y!: number;
+  width!: number;
+  height!: number;
+
   isNowDrawing: Boolean = false;
   cursor: string = "default";
 
@@ -54,8 +62,8 @@ export class PaintComponent implements OnInit {
   ngOnInit(): void {
     document.documentElement.style.setProperty('--wbCursor', "crosshair");
     this.stage = new Konva.Stage({
-      height: 637,
-      width: 1536,
+      height: 600,
+      width: 1400,
       container: "konva-holder"
     });
   
@@ -85,7 +93,7 @@ export class PaintComponent implements OnInit {
     this.clear();
     this.isSelecting = true;
     for (let shape of this.shapeList) {
-      shape.draggable(true);
+      shape.draggable(false);
     }
   }
   copy(){
@@ -103,7 +111,7 @@ export class PaintComponent implements OnInit {
   line(){
     this.clear();
     this.shape = new Konva.Line;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -111,7 +119,7 @@ export class PaintComponent implements OnInit {
   circle(){
     this.clear();
     this.shape = new Konva.Circle;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for(let shape of this.shapeList){
       shape.draggable(false);
     }
@@ -119,7 +127,7 @@ export class PaintComponent implements OnInit {
   ellipse(){
     this.clear();
     this.shape = new Konva.Ellipse;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for(let shape of this.shapeList){
       shape.draggable(false);
     }
@@ -128,7 +136,7 @@ export class PaintComponent implements OnInit {
     this.clear();
     this.isTriangle = true;
     this.shape = new Konva.Line;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -136,7 +144,7 @@ export class PaintComponent implements OnInit {
   square() {
     this.clear();
     this.shape = new Konva.Rect;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -145,7 +153,7 @@ export class PaintComponent implements OnInit {
     this.clear();
     this.isRectangle = true;
     this.shape = new Konva.Rect;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -154,7 +162,7 @@ export class PaintComponent implements OnInit {
     this.clear();
     this.isBrush = true;
     this.shape = new Konva.Line;
-    this.prev_shape = this.shape;
+    this.prevShape = this.shape;
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
@@ -184,10 +192,9 @@ export class PaintComponent implements OnInit {
     this.newColor= 'rgb('+red+','+green+','+blue+')';
     console.log(this.newColor);
     var x = document.getElementById('box');
-    if(x == null){
-
-    }else
-      x.style.backgroundColor = this.newColor;
+    if(x == null){}
+    else x.style.backgroundColor = this.newColor;
+    this.newColor;
   }
   setFont(item: any){
     if(item.target.value == 0){
@@ -217,25 +224,68 @@ export class PaintComponent implements OnInit {
 
   mouseDownHandler(){
     if(this.isSelecting){
-      for(let shape of this.shapeList){
-        shape.draggable(true);
-      }
       this.stage.on("click", (e) => {
         if(!(e.target instanceof Konva.Shape)){
           this.tr.nodes([]);
         }
         if(e.target instanceof Konva.Shape && !this.isFill && !this.isErase){
           this.tr.nodes([e.target]);
+          for (let shape of this.shapeList) {
+            shape.draggable(false);
+          }
+          e.target.draggable(true);
+          this.selectedShape = e.target;
+          this.x = e.target.x();
+          this.y = e.target.y();
         }
         if(e.target instanceof Konva.Shape && this.isFill){
+          let t = "";
+          if(e.target instanceof Konva.Rect){
+            if(Math.abs(e.target.width() - e.target.height()) < 0.1){
+              t = "square";
+            }else t = "rectangle"
+          }else if(e.target instanceof Konva.Circle) t = "circle";
+          else if(e.target instanceof Konva.Ellipse) t = "ellipse";
+          else if(e.target instanceof Konva.Line){
+            if(e.target.closed()) t = "triangle"
+            else t = "line"
+          }
+          if(t == "line") return;
+          this.shapeServiceSend.deleteShape(this.factory.constructBackEndShape(t, e.target, true, false), true).subscribe(response => {
+            console.log(response);
+          });
           e.target.fill(this.newColor);
+          this.shapeServiceSend.sendShape(this.factory.constructBackEndShape(t, e.target, true, false)).subscribe(response => {
+            console.log(response);
+          })
+          this.isFill = false;
+          return;
         }
         if(e.target instanceof Konva.Shape && this.isErase){
-          e.target.destroy();
+          let t = "";
+          if(e.target instanceof Konva.Rect){
+            if(Math.abs(e.target.width() - e.target.height()) < 0.1){
+              t = "square";
+            }else t = "rectangle"
+          }else if(e.target instanceof Konva.Circle) t = "circle";
+          else if(e.target instanceof Konva.Ellipse) t = "ellipse";
+          else if(e.target instanceof Konva.Line){
+            if(e.target.closed()) t = "triangle"
+            else t = "line"
+          }
+          this.shapeServiceSend.sendShape(this.factory.constructBackEndShape(t, e.target, false, true)).subscribe(response => {
+            console.log(response);
+          })
+          e.target.x(-9999).y(-9999);
+          const index = this.shapeList.indexOf(e.target);
+          this.shapeList.splice(index, 1);
+          this.isErase = false;
+          return;
         }
         if(e.target instanceof Konva.Shape && this.isCopy){
           this.copyShape = e.target;
           console.log('copy complete');
+          return;
         }
         this.tr.setAttrs({
           keepRatio: false,
@@ -253,83 +303,61 @@ export class PaintComponent implements OnInit {
       })
       this.layer.add(this.tr);
       this.stage.add(this.layer);
+    }else{
+      this.shape = this.prevShape;
+      if(this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon || 
+        this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse || 
+        this.shape instanceof Konva.Line){
+          this.isNowDrawing = true;
+      }
+      if(this.isPaste){
+        console.log('paste complete');
+        this.shape = this.copyShape;
+      }
+      if (this.shape instanceof Konva.Rect && !this.isRectangle) {
+        this.shape = this.factory.constructKonvaShape("square", this.stage, this.isPaste, this.copyShape);
+      } else if (this.shape instanceof Konva.Circle) {
+        this.shape = this.factory.constructKonvaShape("circle", this.stage, this.isPaste, this.copyShape);
+      } else if (this.shape instanceof Konva.Ellipse) {
+        this.shape = this.factory.constructKonvaShape("ellipse", this.stage, this.isPaste, this.copyShape);
+      } else if (this.shape instanceof Konva.Rect && this.isRectangle) {
+        this.shape = this.factory.constructKonvaShape("rectangle", this.stage, this.isPaste, this.copyShape);
+      } else if (this.shape instanceof Konva.Line && !this.isTriangle && !this.isBrush) {
+        this.shape = this.factory.constructKonvaShape("line", this.stage, this.isPaste, this.copyShape);
+      } else if (this.shape instanceof Konva.Line && this.isTriangle && !this.isBrush) {
+        this.shape = this.factory.constructKonvaShape("triangle", this.stage, this.isPaste, this.copyShape);
+      } else if (this.shape instanceof Konva.Line && !this.isTriangle && this.isBrush) {
+        this.shape = this.factory.constructKonvaShape("brush", this.stage, this.isPaste, this.copyShape);
+      } else {
+        return;
+      }
+      if(!this.isPaste){
+        this.shape.stroke(this.newColor);
+        this.shape.strokeWidth(this.font);
+      }
+      if(this.isPaste){
+        this.shape.id(this.factory.getAvailableID());
+      }
+      this.addShape(this.shape);
     }
-    this.shape = this.prev_shape;
-    if(this.shape instanceof Konva.Rect || this.shape instanceof Konva.RegularPolygon || 
-      this.shape instanceof Konva.Circle || this.shape instanceof Konva.Ellipse || 
-      this.shape instanceof Konva.Line){
-        this.isNowDrawing = true;
-    }
-    if(this.isPaste){
-      console.log('paste complete');
-      this.shape = this.copyShape;
-    }
-    if (this.shape instanceof Konva.Rect && !this.isRectangle) {
-      this.shape = this.factory.constructKonvaShape("square", this.stage, this.isPaste, this.copyShape);
-    } else if (this.shape instanceof Konva.Circle) {
-      this.shape = this.factory.constructKonvaShape("circle", this.stage, this.isPaste, this.copyShape);
-    } else if (this.shape instanceof Konva.Ellipse) {
-      this.shape = this.factory.constructKonvaShape("ellipse", this.stage, this.isPaste, this.copyShape);
-    } else if (this.shape instanceof Konva.Rect && this.isRectangle) {
-      this.shape = this.factory.constructKonvaShape("rectangle", this.stage, this.isPaste, this.copyShape);
-    } else if (this.shape instanceof Konva.Line && !this.isTriangle && !this.isBrush) {
-      this.shape = this.factory.constructKonvaShape("line", this.stage, this.isPaste, this.copyShape);
-    } else if (this.shape instanceof Konva.Line && this.isTriangle && !this.isBrush) {
-      this.shape = this.factory.constructKonvaShape("triangle", this.stage, this.isPaste, this.copyShape);
-    } else if (this.shape instanceof Konva.Line && !this.isTriangle && this.isBrush) {
-      this.shape = this.factory.constructKonvaShape("brush", this.stage, this.isPaste, this.copyShape);
-    } else {
-      return;
-    }
-    if(!this.isPaste){
-      this.shape.stroke(this.newColor);
-      this.shape.strokeWidth(this.font);
-    }
-    this.addShape(this.shape);
   }
-
   mouseMoveHandler(){
+    if(this.isCopy) return;
     if(!this.isPaste){
-      if (this.isSelecting) {
-        for (let shape of this.shapeList) {
-          if ((shape instanceof Konva.Rect) && (this.stage.getPointerPosition()?.x as number) > shape.x() &&
-            (this.stage.getPointerPosition()?.x as number) < shape.x() + shape.width() &&
-            (this.stage.getPointerPosition()?.y as number) > shape.y() &&
-            (this.stage.getPointerPosition()?.y as number) < shape.y() + shape.height()) {
-            document.documentElement.style.setProperty('--wbCursor', "grab");
-            break;
-          } else {
+      if (this.isSelecting && !this.isNowDrawing) {
+        this.stage.on("mousemove", (e) => {
+          if(e.target instanceof Konva.Shape){
+            document.documentElement.style.setProperty('--wbCursor', "pointer");
+          }else{
             document.documentElement.style.setProperty('--wbCursor', "crosshair");
           }
-        }
-        return;
+        })
+      return;
       }else if(this.isNowDrawing){
         if (this.shape instanceof Konva.Rect && !this.isRectangle) {
           const newWidth: number = Math.abs((this.stage.getPointerPosition()?.x as number) - this.shape.x());
           const newheight: number = Math.abs((this.stage.getPointerPosition()?.y as number) - this.shape.y());
-          if ((this.stage.getPointerPosition()?.x as number) > this.shape.x()) {
-            if ((this.stage.getPointerPosition()?.y as number) > this.shape.y())
-              if (newWidth < newheight)
-                this.shape.width(newWidth).height(newWidth);
-              else
-                this.shape.width(newheight).height(newheight);
-            else
-              if (newWidth < newheight)
-                this.shape.width(newWidth).height(-newWidth);
-              else
-                this.shape.width(newheight).height(-newheight);
-          } else {
-            if ((this.stage.getPointerPosition()?.y as number) > this.shape.y())
-              if (newWidth < newheight)
-                this.shape.width(-newWidth).height(newWidth);
-              else
-                this.shape.width(-newheight).height(newheight);
-            else
-              if (newWidth < newheight)
-                this.shape.width(-newWidth).height(-newWidth);
-              else
-                this.shape.width(-newheight).height(-newheight);
-          }
+          this.shape.width(newWidth).height(newWidth);
           this.addFlag = true;
         } else if (this.shape instanceof Konva.Rect && this.isRectangle) {
           const newWidth: number = (this.stage.getPointerPosition()?.x as number) - this.shape.x();
@@ -374,22 +402,59 @@ export class PaintComponent implements OnInit {
   }
 
   mouseUpHandler(){
+    if(this.isCopy) return;
+    if(this.tr.nodes().length > 0){
+      this.stage.on("mouseup", (e) => {
+        if(e.target instanceof Konva.Shape && this.selectedShape instanceof Konva.Shape){
+          if(e.target.x() != this.x || e.target.y() != this.y){
+            let t = "";
+            if(this.selectedShape instanceof Konva.Rect){
+              if(Math.abs(this.selectedShape.width() - this.selectedShape.height()) < 0.1){
+                t = "square";
+              }else t = "rectangle"
+            }else if(this.selectedShape instanceof Konva.Circle) t = "circle";
+            else if(this.selectedShape instanceof Konva.Ellipse) t = "ellipse";
+            else if(this.selectedShape instanceof Konva.Line){
+              if(this.selectedShape.closed()) t = "triangle"
+              else t = "line"
+            }
+            let x1 = e.target.x();
+            let y1 = e.target.y();
+            e.target.x(this.x).y(this.y);
+            this.shapeServiceSend.deleteShape(this.factory.constructBackEndShape(t, e.target, true, false), true).subscribe(response => {
+              console.log(response);
+            });
+            e.target.x(x1).y(y1);
+            this.shapeServiceSend.sendShape(this.factory.constructBackEndShape(t, e.target, true, false)).subscribe(response => {
+              console.log(response);
+            })
+          }
+          this.selectedShape = null;
+          e.target.draggable(false);
+          this.tr.nodes([]);
+          return;
+        }
+      })
+    }
     if(this.isNowDrawing = true && this.addFlag || this.isPaste){
       if(this.isPaste){
         this.tr.nodes([]);
       }
-      if(this.shape instanceof Konva.Rect){
-        if(this.shape.width() < 0){
-          this.shape.x(this.shape.x() + this.shape.width()).width(this.shape.width() * -1);
-        }
-        if(this.shape.height() < 0){
-          this.shape.y(this.shape.y() + this.shape.height()).height(this.shape.height() * -1);
-        }
-      }
       this.isNowDrawing = false;
       this.shapeList.push(this.shape);
       this.addFlag = false;
-      this.shapeServiceSend.sendShape(this.factory.constructBackEndShape("square", this.shape)).subscribe(result => {
+      var t = "";
+          if(this.shape instanceof Konva.Rect){
+            if(Math.abs(this.shape.width() - this.shape.height()) < 0.1){
+              t = "square";
+            }else t = "rectangle"
+          }else if(this.shape instanceof Konva.Circle) t = "circle";
+          else if(this.shape instanceof Konva.Ellipse) t = "ellipse";
+          else if(this.shape instanceof Konva.Line){
+            if(this.shape.closed()) t = "triangle"
+            else t = "line"
+          }
+      this.shapeServiceSend.sendShape(this.factory.constructBackEndShape(t, this.shape, false, false)).subscribe(result => {
         console.log(result);
       })
       for(let shape of this.shapeList){
@@ -405,15 +470,79 @@ export class PaintComponent implements OnInit {
         console.log("Error: Nothing to Undo");
       }else{
         let recievedShape = JSON.parse(result);
-        console.log(recievedShape._id);
-        console.log(this.shapeList);
-        for(let shape of this.shapeList){
-          if(shape.id() == recievedShape._id){
-            shape.x(-9999).y(-9999);
-            const index = this.shapeList.indexOf(shape);
-            this.shapeList.splice(index, 1);
-            break;
+        if(!recievedShape._update){
+          if(!recievedShape._deleteflag){
+            console.log(recievedShape._id);
+            console.log(this.shapeList);
+            for(let shape of this.shapeList){
+              if(shape.id() == recievedShape._id){
+                shape.x(-9999).y(-9999);
+                const index = this.shapeList.indexOf(shape);
+                this.shapeList.splice(index, 1);
+                break;
+              }
+            }
+          }else{
+            console.log(recievedShape._id);
+            console.log(this.shapeList);
+            let addedShape: Konva.Shape;
+            if(recievedShape._type == "square"){
+              addedShape = this.factory.constructSquareFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._sideLength);
+            }else if(recievedShape._type == "rectangle"){
+              addedShape = this.factory.constructRectangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._width, recievedShape._height);
+            }else if(recievedShape._type == "circle"){
+              addedShape = this.factory.constructCircleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radius);
+            }else if(recievedShape._type == "ellipse"){
+              addedShape = this.factory.constructEllipseFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radiusX, recievedShape._radiusY);
+            }else if(recievedShape._type == "triangle"){
+              addedShape = this.factory.constructTriangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+            }else{
+              addedShape = this.factory.constructLineFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+            }
+            this.addShape(addedShape);
+            this.shapeList.push(addedShape);
           }
+        }else{
+          console.log(recievedShape);
+          for(let shape of this.shapeList){
+            if(shape.id() == recievedShape._id){
+              this.shapeServiceSend.deleteShape(this.factory.constructBackEndShape(recievedShape._type, shape, true, false), false).subscribe(response => {
+                console.log(response);
+              });
+              shape.x(-9999).y(-9999);
+              const index = this.shapeList.indexOf(shape);
+              this.shapeList.splice(index, 1);
+              break;
+            }
+          }
+          let addedShape: Konva.Shape;
+          if(recievedShape._type == "square"){
+            addedShape = this.factory.constructSquareFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._sideLength);
+          }else if(recievedShape._type == "rectangle"){
+            addedShape = this.factory.constructRectangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._width, recievedShape._height);
+          }else if(recievedShape._type == "circle"){
+            addedShape = this.factory.constructCircleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radius);
+          }else if(recievedShape._type == "ellipse"){
+            addedShape = this.factory.constructEllipseFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radiusX, recievedShape._radiusY);
+          }else if(recievedShape._type == "triangle"){
+            addedShape = this.factory.constructTriangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+          }else{
+            addedShape = this.factory.constructLineFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+          }
+          this.addShape(addedShape);
+          this.shapeList.push(addedShape);
         }
       }
     })
@@ -425,20 +554,77 @@ export class PaintComponent implements OnInit {
         console.log("Error: Nothing to Redo");
       }else{
         let recievedShape = JSON.parse(result);
-        console.log(recievedShape._id);
-        let addedShape = this.factory.constructSquareFromBack(
-          recievedShape._x,
-          recievedShape._y,
-          recievedShape._stroke,
-          recievedShape._fill,
-          recievedShape._rotate,
-          recievedShape._draggable,
-          recievedShape._id,
-          recievedShape._type,
-          recievedShape._sideLength
-        );
-        this.addShape(addedShape);
-        this.shapeList.push(addedShape);
+        if(!recievedShape._update){
+          if(!recievedShape._deleteflag){
+            let addedShape: Konva.Shape;
+            if(recievedShape._type == "square"){
+              addedShape = this.factory.constructSquareFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._sideLength);
+            }else if(recievedShape._type == "rectangle"){
+              addedShape = this.factory.constructRectangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._width, recievedShape._height);
+            }else if(recievedShape._type == "circle"){
+              addedShape = this.factory.constructCircleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radius);
+            }else if(recievedShape._type == "ellipse"){
+              addedShape = this.factory.constructEllipseFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radiusX, recievedShape._radiusY);
+            }else if(recievedShape._type == "triangle"){
+              addedShape = this.factory.constructTriangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+            }else{
+              addedShape = this.factory.constructLineFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+                recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+            }
+            this.addShape(addedShape);
+            this.shapeList.push(addedShape);
+          }else{
+            console.log(recievedShape._id);
+            console.log(this.shapeList);
+            for(let shape of this.shapeList){
+              if(shape.id() == recievedShape._id){
+                shape.x(-9999).y(-9999);
+                const index = this.shapeList.indexOf(shape);
+                this.shapeList.splice(index, 1);
+                break;
+              }
+            }
+          }
+        }else{
+          for(let shape of this.shapeList){
+            if(shape.id() == recievedShape._id){
+              this.shapeServiceSend.deleteShape(this.factory.constructBackEndShape(recievedShape._type, shape, true, false), true).subscribe(response => {
+                console.log(response);
+              });
+              shape.x(-9999).y(-9999);
+              const index = this.shapeList.indexOf(shape);
+              this.shapeList.splice(index, 1);
+              break;
+            }
+          }
+          let addedShape: Konva.Shape;
+          if(recievedShape._type == "square"){
+            addedShape = this.factory.constructSquareFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._sideLength);
+          }else if(recievedShape._type == "rectangle"){
+            addedShape = this.factory.constructRectangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._width, recievedShape._height);
+          }else if(recievedShape._type == "circle"){
+            addedShape = this.factory.constructCircleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radius);
+          }else if(recievedShape._type == "ellipse"){
+            addedShape = this.factory.constructEllipseFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radiusX, recievedShape._radiusY);
+          }else if(recievedShape._type == "triangle"){
+            addedShape = this.factory.constructTriangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+          }else{
+            addedShape = this.factory.constructLineFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+              recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+          }
+          this.addShape(addedShape);
+          this.shapeList.push(addedShape);
+        }
       }
     })
   }
@@ -448,8 +634,66 @@ export class PaintComponent implements OnInit {
     this.stage.add(this.layer);
   }
 
+  save(){
+    this.shapeServiceSend.save().subscribe();
+  }
+
+  load(){
+    this.layer.destroy();
+    this.stage.remove();
+    this.ngOnInit();
+    this.shapeList = [];
+    let recievedData: any;
+    this.shapeServiceRecieve.load().subscribe(response => {
+      let x = JSON.stringify(response);
+      recievedData = JSON.parse(x);
+      for (let recievedShape of recievedData) {
+        let addedShape;
+        this.shapeList = this.shapeList.filter(({id}) => id !== recievedShape.key);
+        if(recievedShape._type == "square"){
+          addedShape = this.factory.constructSquareFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+            recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._sideLength);
+        }else if(recievedShape._type == "rectangle"){
+          addedShape = this.factory.constructRectangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+            recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._width, recievedShape._height);
+        }else if(recievedShape._type == "circle"){
+          addedShape = this.factory.constructCircleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+            recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radius);
+        }else if(recievedShape._type == "ellipse"){
+          addedShape = this.factory.constructEllipseFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+            recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._radiusX, recievedShape._radiusY);
+        }else if(recievedShape._type == "triangle"){
+          addedShape = this.factory.constructTriangleFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+            recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+        }else{
+          addedShape = this.factory.constructLineFromBack(recievedShape._x,recievedShape._y,recievedShape._stroke,recievedShape._strokeWidth,recievedShape._fill,
+            recievedShape._rotate, recievedShape._draggable, recievedShape._id, recievedShape._type, recievedShape._points);
+        }
+        this.addShape(addedShape);
+        this.shapeList.push(addedShape);
+      }
+    });
+    this.shapeServiceSend.restart().subscribe;
+  }
+
   clearScreen(){
-    this.layer.removeChildren();
+    for(let shape of this.shapeList){
+      let t = "";
+      if(shape instanceof Konva.Rect){
+        if(Math.abs(shape.width() - shape.height()) < 0.1){
+          t = "square";
+        }else t = "rectangle"
+      }else if(shape instanceof Konva.Circle) t = "circle";
+      else if(shape instanceof Konva.Ellipse) t = "ellipse";
+      else if(shape instanceof Konva.Line){
+        if(shape.closed()) t = "triangle"
+        else t = "line"
+      }
+      this.shapeServiceSend.sendShape(this.factory.constructBackEndShape(t, shape, false, true)).subscribe(response => {
+        console.log(response);
+      })
+      shape.x(-9999).y(-9999);
+    }
     while(this.shapeList.length > 0) this.shapeList.pop();
   }
 

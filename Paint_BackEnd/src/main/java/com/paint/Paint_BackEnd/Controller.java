@@ -4,6 +4,7 @@ import com.paint.paint_backend.Shapes.IShape;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
@@ -14,12 +15,25 @@ public class Controller {
     @PostMapping("/create/{type}")
     @ResponseBody
     public String addShape(@RequestBody String receivedJSON, @PathVariable String type) throws JSONException {
-        return ShapeService.addShape(receivedJSON);
+        return ShapeService.addShape(receivedJSON, type);
     }
 
-    @PostMapping("/create/restart")
-    public void restart(){
-        ShapeService.restart();
+    @PostMapping("/delete/{type}/{UR}")
+    @ResponseBody
+    public String deleteShape(@RequestBody String receivedJSON, @PathVariable String type, @PathVariable boolean UR) throws JSONException {
+        return ShapeService.deleteShape(receivedJSON, UR, type);
+    }
+
+    @PostMapping("/save")
+    @ResponseBody
+    public void save() throws IOException {
+        ShapeService.save();
+    }
+
+    @GetMapping("/load")
+    @ResponseBody
+    public String load() throws IOException {
+        return ShapeService.load();
     }
 
     @GetMapping("/undo")
@@ -32,4 +46,8 @@ public class Controller {
         return ShapeService.redo();
     }
 
+    @PostMapping("/restart")
+    public void restart() {
+        ShapeService.restart();
+    }
 }

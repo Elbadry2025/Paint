@@ -4,8 +4,8 @@ export class Square extends IShape {
     
     private _sideLength: number;
 
-    constructor(x: number, y: number, stroke: string, fill: string, rotate: number, draggable: boolean, id: string, sideLength: number){
-        super(x, y, stroke, fill, rotate, draggable, id);
+    constructor(x: number, y: number, stroke: string, strokeWidth: number, fill: string, rotate: number, draggable: boolean, id: string, update: boolean, deleteflag: boolean, sideLength: number){
+        super(x, y, stroke, strokeWidth, fill, rotate, draggable, id, update, deleteflag);
         this._sideLength = sideLength;
         this.type = "square";
     }

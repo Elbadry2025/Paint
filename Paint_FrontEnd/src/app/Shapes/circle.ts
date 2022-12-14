@@ -1,19 +1,18 @@
 import { IShape } from "./ishape";
 
-export class circle extends IShape {
-    
+export class Circle extends IShape{
     private _radius: number;
-
-    constructor(x: number, y: number, stroke: string, fill: string, rotate: number, draggable: boolean, id: number, radius: number){
-        super(x, y, stroke, fill, rotate, draggable, id);
+    
+    constructor(x: number, y: number, stroke: string, strokeWidth: number, fill: string, rotate: number, draggable: boolean, id: string, update: boolean, deleteflag: boolean, radius: number){
+        super(x, y, stroke, strokeWidth, fill, rotate, draggable, id, update, deleteflag);
         this._radius = radius;
         this.type = "circle";
     }
 
-    public get sideLength(): number {
+    public get radius(): number {
         return this._radius;
     }
-    public set sideLength(value: number) {
-        this._radius= value;
+    public set radius(value: number) {
+        this._radius = value;
     }
 }
