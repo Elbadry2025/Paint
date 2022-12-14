@@ -117,12 +117,9 @@ public class ShapeService {
     }
     public static void save() throws IOException {
         String extension = "", canonPath = "";
-        // parent component of the dialog
         System.setProperty("java.awt.headless", "false");
         JFrame fe = new JFrame(gc);
-        // set the size of the frame
         fe.setSize(800, 600);
-        // set the frame's visibility
         fe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setPreferredSize(new Dimension(800, 600));
@@ -143,52 +140,29 @@ public class ShapeService {
             fe.remove(fileChooser);
             return;
         }
-        if (extension.equals(".json")) {
-            try {
-                Gson gson = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .create();
-                FileWriter f = new FileWriter(canonPath + extension);
-                ArrayList<IShape> x = new ArrayList<>();
-                Set<String> keySet = currentShapes.keySet();
-                for (String key : keySet) {
-                    x.add(currentShapes.get(key));
-                }
-                gson.toJson(x, f);
-                f.flush();
-                f.close();
+        try {
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+            FileWriter f = new FileWriter(canonPath + extension);
+            ArrayList<IShape> x = new ArrayList<>();
+            Set<String> keySet = currentShapes.keySet();
+            for (String key : keySet) {
+                x.add(currentShapes.get(key));
+            }
+            gson.toJson(x, f);
+            f.flush();
+            f.close();
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                FileOutputStream fos = new FileOutputStream(canonPath + extension);
-                XMLEncoder encoder = new XMLEncoder(fos);
-                ArrayList<IShape> x = new ArrayList<>();
-                Set<String> keySet = currentShapes.keySet();
-                for (String key : keySet) {
-                    x.add(currentShapes.get(key));
-                }
-                encoder.writeObject(x);
-                encoder.close();
-                fos.flush();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
     public static String load() throws IOException {
-        String message;
         String canonPath = "", extension = "";
-        // parent component of the dialog
         System.setProperty("java.awt.headless", "false");
         JFrame fe = new JFrame(gc);
-        // set the size of the frame
         fe.setSize(800, 600);
-        // set the frame's visibility
         fe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setPreferredSize(new Dimension(800, 600));
@@ -208,39 +182,19 @@ public class ShapeService {
         } else if (userSelection == JFileChooser.CANCEL_OPTION) {
             fileChooser.setVisible(false);
             fe.remove(fileChooser);
-            message = "canceled";
             return "Error";
         }
-
-        if (extension.equals(".json")) {
-            try {
-                Gson json = new Gson();
-                FileReader f = new FileReader(canonPath);
-                ArrayList<IShape> x = json.fromJson(f, ArrayList.class);
-                f.close();
-                String y = new Gson().toJson(x);
-                message = y;
-                return y;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                FileInputStream f2 = new FileInputStream(canonPath);
-                XMLDecoder mydecoder = new XMLDecoder(f2);
-                ArrayList<IShape> result = (ArrayList<IShape>) mydecoder.readObject();
-                mydecoder.close();
-                f2.close();
-                Gson gson = new GsonBuilder()
-                        .setPrettyPrinting()
-                        .create();
-                return gson.toJson(result);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        try {
+            Gson json = new Gson();
+            FileReader f = new FileReader(canonPath);
+            ArrayList<IShape> x = json.fromJson(f, ArrayList.class);
+            f.close();
+            String y = new Gson().toJson(x);
+            return y;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
+        return "Something blew up -_-";
     }
     public static void restart(){
         undo_stack.clear();
