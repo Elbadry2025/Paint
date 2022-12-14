@@ -181,6 +181,10 @@
         <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">&nbsp;&nbsp;&nbsp;Fontsize:</p>
         <input (input)="setFont($event)" type ="range" id = "txt" value ="0" min="0" max="25" step="5">
     </div>
+    <div id="currentOP">
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">&nbsp;&nbsp;&nbsp;Current Operation: </p>
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center;">{{op}}</p>
+    </div>
 </div>
 <div class="konva-align" id="xas">
     <div id="konva-holder" (mousedown)="mouseDownHandler()" (mousemove)="mouseMoveHandler()"

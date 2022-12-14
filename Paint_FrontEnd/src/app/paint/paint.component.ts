@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import Konva from 'konva';
 import { Rect } from 'konva/lib/shapes/Rect';
 import { stages } from 'konva/lib/Stage';
@@ -44,6 +44,7 @@ export class PaintComponent implements OnInit {
   red: number = 0
   green: number = 0;
   blue: number = 0;
+  op: string = "none";
 
   x!: number;
   y!: number;
@@ -88,6 +89,9 @@ export class PaintComponent implements OnInit {
     this.isPaste = false;
     this.isRectangle = false;
   }
+  @HostListener('window:keydown.p', ['$event']) select() {
+    this.selector();
+  }
   selector(){
     this.shape = null;
     this.clear();
@@ -95,6 +99,14 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Selector";
+  }
+  @HostListener('window:keydown.Control.c', ['$event']) co() {
+    this.copy();
+  }
+
+  @HostListener('window:keydown.Control.v', ['$event']) pa() {
+    this.paste();
   }
   copy(){
     this.clear();
@@ -103,10 +115,12 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Copy";
   }
   paste(){
     this.clear();
     this.isPaste = true;
+    this.op = "Paste";
   }
   line(){
     this.clear();
@@ -115,6 +129,10 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Line";
+  }
+  @HostListener('window:keydown.i', ['$event']) l() {
+    this.line();
   }
   circle(){
     this.clear();
@@ -123,6 +141,10 @@ export class PaintComponent implements OnInit {
     for(let shape of this.shapeList){
       shape.draggable(false);
     }
+    this.op = "Circle";
+  }
+  @HostListener('window:keydown.c', ['$event']) c() {
+    this.circle();
   }
   ellipse(){
     this.clear();
@@ -131,6 +153,10 @@ export class PaintComponent implements OnInit {
     for(let shape of this.shapeList){
       shape.draggable(false);
     }
+    this.op = "Ellipse";
+  }
+  @HostListener('window:keydown.e', ['$event']) e() {
+    this.ellipse();
   }
   triangle(){
     this.clear();
@@ -140,6 +166,10 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Triangle";
+  }
+  @HostListener('window:keydown.t', ['$event']) t() {
+    this.triangle();
   }
   square() {
     this.clear();
@@ -148,6 +178,10 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Square";
+  }
+  @HostListener('window:keydown.s', ['$event']) s() {
+    this.square();
   }
   rect() {
     this.clear();
@@ -157,6 +191,10 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Rectangle";
+  }
+  @HostListener('window:keydown.r', ['$event']) r() {
+    this.rect();
   }
   brush() {
     this.clear();
@@ -166,6 +204,10 @@ export class PaintComponent implements OnInit {
     for (let shape of this.shapeList) {
       shape.draggable(false);
     }
+    this.op = "Brush";
+  }
+  @HostListener('window:keydown.b', ['$event']) b() {
+    this.brush();
   }
   coloring(color: string) {
     this.newColor = color;
@@ -211,15 +253,23 @@ export class PaintComponent implements OnInit {
       this.font = 25;
     }
   }
+  @HostListener('window:keydown.f', ['$event']) fi() {
+    this.Fill();
+  }
   Fill(){
     this.clear();
     this.isFill = true;
     this.isSelecting = true;
+    this.op = "Fill";
+  }
+  @HostListener('window:keydown.Delete', ['$event']) de() {
+    this.Erase();
   }
   Erase(){
     this.clear();
     this.isErase = true;
     this.isSelecting = true;
+    this.op = "Eraser";
   }
 
   mouseDownHandler(){
@@ -464,6 +514,14 @@ export class PaintComponent implements OnInit {
     this.shape = null;
   }
 
+  @HostListener('window:keydown.Control.z', ['$event']) cz() {
+    this.undo();
+  }
+
+  @HostListener('window:keydown.Control.y', ['$event']) cy() {
+    this.redo();
+  }
+
   undo(){
     this.shapeServiceRecieve.undo().subscribe(result => {
       if(result == "Error"){
@@ -634,6 +692,16 @@ export class PaintComponent implements OnInit {
     this.stage.add(this.layer);
   }
 
+  @HostListener('window:keydown.Control.s', ['$event']) sa(e: any) {
+    e.preventDefault();
+    this.save();
+  }
+
+  @HostListener('window:keydown.Control.o', ['$event']) lo(e: any) {
+    e.preventDefault();
+    this.load();
+  }
+
   save(){
     this.shapeServiceSend.save().subscribe();
   }
@@ -696,5 +764,4 @@ export class PaintComponent implements OnInit {
     }
     while(this.shapeList.length > 0) this.shapeList.pop();
   }
-
 }

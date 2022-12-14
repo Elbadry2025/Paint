@@ -4,8 +4,8 @@
     position: absolute;
     display: flex;
     top: 5px;
-    left: 140px;
-    width: 1250px;
+    left: 60px;
+    width: 1400px;
     height: 103px;
     border-radius: 50px;
     background: rgb(46, 46, 85);
@@ -86,6 +86,7 @@
     border-radius: 50%;
     background-color: black;
 }
+
 #red_rgb, #blue_rgb, #green_rgb{
     position: relative;
     left: 10px;
@@ -94,6 +95,14 @@
     border-radius: 50px;
     border: 1px solid silver;
 }
+
+#currentOP{
+    position: absolute;
+    left: 1230px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .more-colors #red_rgb{
     background: linear-gradient(90deg, #000, red);
     
