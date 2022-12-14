@@ -740,8 +740,23 @@ export class PaintComponent implements OnInit {
         this.addShape(addedShape);
         this.shapeList.push(addedShape);
       }
+      let t = "";
+      for(let shape of this.shapeList){
+        if(shape instanceof Konva.Rect){
+          if(Math.abs(shape.width() - shape.height()) < 0.1){
+            t = "square";
+          }else t = "rectangle"
+        }else if(shape instanceof Konva.Circle) t = "circle";
+        else if(shape instanceof Konva.Ellipse) t = "ellipse";
+        else if(shape instanceof Konva.Line){
+          if(shape.closed()) t = "triangle"
+          else t = "line"
+        }
+        this.shapeServiceSend.sendShape(this.factory.constructBackEndShape(t, shape, false, true)).subscribe(response => {
+          console.log(response);
+        })
+      }
     });
-    this.shapeServiceSend.restart().subscribe;
   }
 
   clearScreen(){
