@@ -173,9 +173,9 @@
     </style>
     <div class="more-colors">
         <div id = "box"></div>
-        <input (change)="setRed($event)" name="red_rgb" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
-        <input (change)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
-        <input (change)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">
+        <input (input)="setRed($event)" name="red_rgb" type = "range" id = "red_rgb" value ="0" min="0" max="255"> 
+        <input (input)="setGreen($event)" type = "range" id="green_rgb" value ="0" min="0" max="255">
+        <input (input)="setBlue($event)" type = "range" id = "blue_rgb" value ="0" min="0" max="255">
     </div>
     <div class="font">
         <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">&nbsp;&nbsp;&nbsp;Fontsize:</p>
