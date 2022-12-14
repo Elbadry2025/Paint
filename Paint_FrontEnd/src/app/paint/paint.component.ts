@@ -240,7 +240,7 @@ export class PaintComponent implements OnInit {
   }
   setFont(item: any){
     if(item.target.value == 0){
-      this.font = 1;
+      this.font = 2;
     }else if(item.target.value == 5){
       this.font = 5;
     }else if(item.target.value == 10){

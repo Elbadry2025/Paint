@@ -29,25 +29,8 @@ public class ShapeService {
     private static HashMap<String, IShape> currentShapes = new HashMap<>();
     public static String addShape(String receivedJSON, String type) throws JSONException {
 
-        JSONObject JO = new JSONObject(receivedJSON);
-        Gson G = new Gson();
-        System.out.println(JO);
-        IShape shape;
-        if(type.toLowerCase().equals("square")){
-            shape = G.fromJson(receivedJSON, Square.class);
-        }else if(type.toLowerCase().equals("rectangle")){
-            shape = G.fromJson(receivedJSON, Rectangle.class);
-        }else if(type.toLowerCase().equals("circle")){
-            shape = G.fromJson(receivedJSON, Circle.class);
-        }else if(type.toLowerCase().equals("ellipse")){
-            shape = G.fromJson(receivedJSON, Ellipse.class);
-        }else if(type.toLowerCase().equals("triangle")){
-            shape = G.fromJson(receivedJSON, Triangle.class);
-        }else if(type.toLowerCase().equals("line")){
-            shape = G.fromJson(receivedJSON, Line.class);
-        }else{
-            return "Something bad happened";
-        }
+        factory shapeFactory = new factory();
+        IShape shape = shapeFactory.constructShape(type, receivedJSON);
         undo_stack.push(shape);
         redo_stack.clear();
         currentShapes.put(shape.get_id(), shape);
