@@ -274,6 +274,9 @@ export class PaintComponent implements OnInit {
 
   mouseDownHandler(){
     if(this.isSelecting){
+      if(this.tr.nodes().length > 0){
+        return;
+      }
       this.stage.on("click", (e) => {
         if(!(e.target instanceof Konva.Shape)){
           this.tr.nodes([]);
@@ -392,6 +395,9 @@ export class PaintComponent implements OnInit {
     }
   }
   mouseMoveHandler(){
+    if(this.tr.nodes().length > 0){
+      return;
+    }
     if(this.isCopy) return;
     if(!this.isPaste){
       if (this.isSelecting && !this.isNowDrawing) {
@@ -452,6 +458,9 @@ export class PaintComponent implements OnInit {
   }
 
   mouseUpHandler(){
+    if(this.tr.nodes().length > 0){
+      return;
+    }
     if(this.isCopy) return;
     if(this.tr.nodes().length > 0){
       this.stage.on("mouseup", (e) => {
